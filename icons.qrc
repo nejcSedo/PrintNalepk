@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icon"/>
+    <qresource prefix="/icons">
+        <file>icon.ico</file>
+        <file>izhod.ico</file>
+        <file>about.ico</file>
+        <file>bin.ico</file>
+        <file>save.ico</file>
+        <file>elraseti.png</file>
+        <file>info.png</file>
+        <file>print.ico</file>
+    </qresource>
+</RCC>
