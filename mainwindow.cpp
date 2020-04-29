@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.1")
+    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.1"), m_verzijaLabel(new QLabel(this))
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowTitle("Tiskanje nalepk");
     ui->lineEdit_IDprodukta->setFocus();
     MainWindow::setWindowIcon(icon);
-    ui->label_verzija->setText(m_verzija);
     ui->treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->treeWidget->setColumnCount(2);
     ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
@@ -28,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_natisni->setDisabled(true);
     ui->actionPrint->setDisabled(true);
     ui->actionShrani_nalepko->setDisabled(true);
+    m_verzijaLabel->setText(m_verzija);
+    ui->statusbar->addPermanentWidget(m_verzijaLabel);
     Read();
 }
 
@@ -443,7 +444,7 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 void MainWindow::on_treeWidget_customContextMenuRequested(const QPoint &pos)
 {
     QMenu menu(this);
-    QIcon bin(":icons/bin.ico");
+    QIcon bin(":icons/delete.ico");
     menu.addAction(ui->actionDelete);
 
     ui->actionDelete->setData(QVariant(pos));
@@ -453,6 +454,7 @@ void MainWindow::on_treeWidget_customContextMenuRequested(const QPoint &pos)
 
 void MainWindow::on_actionIzhod_triggered()
 {
+    ui->statusbar->showMessage("Izhod", 3000);
     QApplication::quit();
 }
 
@@ -501,6 +503,7 @@ void MainWindow::on_actionDelete_triggered()
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
     Read();
+    ui->statusbar->showMessage("Nalepka izbrisana", 3000);
 }
 
 void MainWindow::on_actionShrani_nalepko_triggered()
@@ -531,6 +534,7 @@ void MainWindow::on_actionShrani_nalepko_triggered()
     ui->pushButton_shraniNalepko->setDisabled(true);
     ui->actionShrani_nalepko->setDisabled(true);
     ui->lineEdit_kolicina->setFocus();
+    ui->statusbar->showMessage("Nalepka shranjena", 3000);
 }
 
 void MainWindow::on_actionPrint_triggered()
@@ -541,6 +545,7 @@ void MainWindow::on_actionPrint_triggered()
     ui->lineEdit_kolicina->clear();
     ui->pushButton_shraniNalepko->setDisabled(true);
     ui->lineEdit_IDprodukta->setFocus();
+    ui->statusbar->showMessage("Nalepka se tiska", 3000);
 }
 
 void MainWindow::on_actionO_programu_triggered()

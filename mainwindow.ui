@@ -19,6 +19,15 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QTreeWidget" name="treeWidget">
+        <property name="frameShape">
+         <enum>QFrame::WinPanel</enum>
+        </property>
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustToContents</enum>
+        </property>
         <column>
          <property name="text">
           <string>ID produkta</string>
@@ -54,7 +63,7 @@
          <widget class="QLabel" name="label_IDprodukta">
           <property name="minimumSize">
            <size>
-            <width>100</width>
+            <width>115</width>
             <height>0</height>
            </size>
           </property>
@@ -68,11 +77,20 @@
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
+          <property name="frameShape">
+           <enum>QFrame::WinPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
           <property name="text">
            <string>ID produkta:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_IDprodukta</cstring>
           </property>
          </widget>
         </item>
@@ -87,7 +105,7 @@
          <widget class="QLabel" name="label_nazivProdukta">
           <property name="minimumSize">
            <size>
-            <width>100</width>
+            <width>115</width>
             <height>0</height>
            </size>
           </property>
@@ -101,11 +119,20 @@
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
+          <property name="frameShape">
+           <enum>QFrame::WinPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
           <property name="text">
            <string>Naziv produkta:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_nazivProdukta</cstring>
           </property>
          </widget>
         </item>
@@ -120,7 +147,7 @@
          <widget class="QLabel" name="label_kolicina">
           <property name="minimumSize">
            <size>
-            <width>100</width>
+            <width>115</width>
             <height>0</height>
            </size>
           </property>
@@ -134,11 +161,20 @@
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
+          <property name="frameShape">
+           <enum>QFrame::WinPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
           <property name="text">
            <string>Količina:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_kolicina</cstring>
           </property>
          </widget>
         </item>
@@ -178,16 +214,6 @@
        </layout>
       </item>
      </layout>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_verzija">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>

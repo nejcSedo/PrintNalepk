@@ -12,6 +12,7 @@
 #include <QtPrintSupport/QPrintDialog>
 #include <QDate>
 #include <QKeyEvent>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -52,5 +53,6 @@ private:
     QString m_id;
     QString m_naziv;
     QString m_verzija;
+    QLabel *m_verzijaLabel;
 };
 #endif // MAINWINDOW_H

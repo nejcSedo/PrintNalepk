@@ -4,11 +4,10 @@
         <file>icon.ico</file>
         <file>izhod.ico</file>
         <file>about.ico</file>
-        <file>bin.ico</file>
         <file>save.ico</file>
         <file>elraseti.png</file>
-        <file>info.png</file>
         <file>print.ico</file>
         <file>error.ico</file>
+        <file>delete.ico</file>
     </qresource>
 </RCC>
