@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_kolicina->clear();
     ui->pushButton_shraniNalepko->setDisabled(true);
     ui->pushButton_natisni->setDisabled(true);
+    ui->actionPrint->setDisabled(true);
     ui->actionShrani_nalepko->setDisabled(true);
     Read();
 }
@@ -85,12 +86,14 @@ void MainWindow::Read()
     while(!in.atEnd())
     {
         mText = in.readLine();
-        list = mText.split(rx, QString::SkipEmptyParts);
 
-        if(mText == "" || mText == "DELETE" || mText == "DELETE;DELETE")
+        if(mText == "" || mText == "DELETE;DELETE" || mText == "Seznam nalepk:")
             continue;
         else
+        {
+            list = mText.split(rx, QString::SkipEmptyParts);
             AddRoot(list.at(0), list.at(1));
+        }
     }
 
     fileName.close();
@@ -116,6 +119,8 @@ void MainWindow::Search(QString id, QString naziv)
         line = out.readLine();
         if((line.contains(id, Qt::CaseInsensitive) && id != "") || (line.contains(naziv, Qt::CaseInsensitive) && naziv != ""))
         {
+            if(line == "Seznam nalepk:")
+                continue;
             list = line.split(rx, QString::SkipEmptyParts);
             if(list.at(0) == "DELETE")
                 continue;
@@ -298,6 +303,9 @@ void MainWindow::ProduktCheck(QString id, QString naziv)
         line = in.readLine();
         numOfLines++;
 
+        if(line == "Seznam nalepk:")
+            continue;
+
         if(id.at(id.length()-1) == ' ')
             id = id.remove(id.length()-1, 1);
 
@@ -307,9 +315,15 @@ void MainWindow::ProduktCheck(QString id, QString naziv)
         list = line.split(rx, QString::SkipEmptyParts);
 
         if(id == "" || naziv == "")
+        {
             ui->pushButton_natisni->setDisabled(true);
+            ui->actionPrint->setDisabled(true);
+        }
         else
+        {
             ui->pushButton_natisni->setDisabled(false);
+            ui->actionPrint->setDisabled(false);
+        }
 
         if(list.at(0) == id || list.at(1) == naziv || id == "" || naziv == "")
         {
