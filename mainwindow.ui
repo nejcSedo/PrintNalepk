@@ -180,9 +180,9 @@
      </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="label_verzija">
       <property name="text">
-       <string>Verzija 1.0</string>
+       <string/>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

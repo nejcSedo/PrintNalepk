@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv("")
+    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.1")
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowTitle("Tiskanje nalepk");
     ui->lineEdit_IDprodukta->setFocus();
     MainWindow::setWindowIcon(icon);
+    ui->label_verzija->setText(m_verzija);
     ui->treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->treeWidget->setColumnCount(2);
     ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
     ui->pushButton_shraniNalepko->setDisabled(true);
+    ui->pushButton_natisni->setDisabled(true);
     ui->actionShrani_nalepko->setDisabled(true);
     Read();
 }
@@ -65,13 +67,12 @@ void MainWindow::AddRoot(QString id, QString naziv)
 void MainWindow::Read()
 {
     ui->treeWidget->clear();
-    QString produkti = "produkti.txt";
-
-    QFile fileName(produkti);
+    QString nalepke = "nalepke.txt";
+    QFile fileName(nalepke);
 
     if(!fileName.open(QFile::ReadOnly | QFile::Text))
     {
-        qDebug() << "Error opening file for reading in Read()";
+        Error(0);
         return;
     }
 
@@ -97,15 +98,15 @@ void MainWindow::Read()
 
 void MainWindow::Search(QString id, QString naziv)
 {
-    QString produkti = "produkti.txt";
-    QFile mFile(produkti);
+    QString nalepke = "nalepke.txt";
+    QFile fileName(nalepke);
 
-    if(!mFile.open(QFile::Text | QFile::ReadOnly))
+    if(!fileName.open(QFile::Text | QFile::ReadOnly))
     {
-        qDebug() << "Error opening mFile for reading in Search";
+        Error(1);
         return;
     }
-    QTextStream out(&mFile);
+    QTextStream out(&fileName);
     out.setCodec("UTF-8");
     QString line;
     QRegExp rx("[;]");
@@ -122,28 +123,18 @@ void MainWindow::Search(QString id, QString naziv)
                 AddRoot(list.at(0), list.at(1));
         }
     }
-    mFile.close();
+    fileName.close();
 }
 
 void MainWindow::Nalepka()
 {
-    QString id("");
-    QString naziv("");
+    QString id(ui->lineEdit_IDprodukta->text().toUpper());
+    QString naziv(ui->lineEdit_nazivProdukta->text().toUpper());
     QString kolicina("");
     if(ui->lineEdit_kolicina->text() == "")
         kolicina = "/";
     else
         kolicina = ui->lineEdit_kolicina->text().toUpper();
-
-    if(ui->lineEdit_IDprodukta->text() == "")
-        id = "/";
-    else
-        id = ui->lineEdit_IDprodukta->text().toUpper();
-
-    if(ui->lineEdit_nazivProdukta->text() == "")
-        naziv = "/";
-    else
-        naziv = ui->lineEdit_nazivProdukta->text().toUpper();
 
     QString text_nalepka =
         /**************************** NALEPKA *********************************/
@@ -286,15 +277,16 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
 
 void MainWindow::ProduktCheck(QString id, QString naziv)
 {
-    QString produkti = "produkti.txt";
+    QString nalepke = "nalepke.txt";
     QString line("");
     QStringList list;
     QRegExp rx("[;]");
-    QFile fileName(produkti);
+    QFile fileName(nalepke);
+    short numOfLines(0);
 
     if(!fileName.open(QFile::Text | QFile::ReadOnly))
     {
-        qDebug() << "Error opening mFile for reading in on_pushButton_odstraniProdukt_clicked";
+        Error(2);
         return;
     }
 
@@ -304,6 +296,7 @@ void MainWindow::ProduktCheck(QString id, QString naziv)
     while(!in.atEnd())
     {
         line = in.readLine();
+        numOfLines++;
 
         if(id.at(id.length()-1) == ' ')
             id = id.remove(id.length()-1, 1);
@@ -312,6 +305,11 @@ void MainWindow::ProduktCheck(QString id, QString naziv)
             naziv = naziv.remove(naziv.length()-1, 1);
 
         list = line.split(rx, QString::SkipEmptyParts);
+
+        if(id == "" || naziv == "")
+            ui->pushButton_natisni->setDisabled(true);
+        else
+            ui->pushButton_natisni->setDisabled(false);
 
         if(list.at(0) == id || list.at(1) == naziv || id == "" || naziv == "")
         {
@@ -325,7 +323,37 @@ void MainWindow::ProduktCheck(QString id, QString naziv)
             ui->actionShrani_nalepko->setDisabled(false);
         }
     }
+
+    if(numOfLines == 0 && id != "" && naziv != "")
+    {
+        ui->pushButton_shraniNalepko->setDisabled(false);
+    }
+
     fileName.close();
+}
+
+void MainWindow::Error(int numError)
+{
+    QDialog *dialog = new QDialog(this);
+    QLabel *label = new QLabel(this);
+    QHBoxLayout *layout = new QHBoxLayout();
+    QIcon icon(":icons/error.ico");
+    dialog->setWindowTitle("Napaka");
+    dialog->setWindowIcon(icon);
+    switch (numError)
+    {
+        case 0: label->setText("fileName v funkciji Read() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
+        case 1: label->setText("fileName v funkciji Search() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
+        case 2: label->setText("fileName v funkciji ProductCheck() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
+        case 3: label->setText("fileName v funkciji on_actionDelete_triggered() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
+        case 4: label->setText("fileName v funkciji on_actionDelete_triggered() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
+        case 5: label->setText("fileName v funkciji on_actionDelete_triggered() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
+        case 6: label->setText("fileName v funkciji on_actionShrani_nalepko_triggered() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
+        default: label->setText("Neznana napaka"); break;
+    }
+    layout->addWidget(label);
+    dialog->setLayout(layout);
+    dialog->exec();
 }
 
 void MainWindow::on_pushButton_shraniNalepko_clicked()
@@ -395,7 +423,7 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
     ui->treeWidget->clear();
     Read();
     return;
-    qDebug() << column;
+    Error(column);
 }
 
 void MainWindow::on_treeWidget_customContextMenuRequested(const QPoint &pos)
@@ -421,12 +449,12 @@ void MainWindow::on_actionDelete_triggered()
         return;
     }
 
-    QString produkti = "produkti.txt";
+    QString nalepke = "nalepke.txt";
 
-    QFile fileName(produkti);
+    QFile fileName(nalepke);
     if(!fileName.open(QFile::Text | QFile::ReadOnly))
     {
-        qDebug() << "Error opening mFile for reading in on_pushButton_odstraniProdukt_clicked";
+        Error(3);
         return;
     }
 
@@ -436,10 +464,11 @@ void MainWindow::on_actionDelete_triggered()
     fileName.close();
 
     QString produkt(ui->treeWidget->currentItem()->text(0)+";"+ui->treeWidget->currentItem()->text(1));
-    allText.replace(produkt, "DELETE");
+    allText.replace(produkt, "DELETE;DELETE");
+
     if(!fileName.open(QFile::WriteOnly | QFile::Truncate))
     {
-        qDebug() << "Error opening mFile for truncate in on_pushButton_odstraniProdukt_clicked";
+        Error(4);
         return;
     }
     fileName.flush();
@@ -447,7 +476,7 @@ void MainWindow::on_actionDelete_triggered()
 
     if(!fileName.open(QFile::WriteOnly | QFile::Text))
     {
-        qDebug() << "Error opening mFile for writing in on_pushButton_odstraniProdukt_clicked";
+        Error(5);
         return;
     }
     in << allText;
@@ -462,12 +491,12 @@ void MainWindow::on_actionDelete_triggered()
 
 void MainWindow::on_actionShrani_nalepko_triggered()
 {
-    QString produkti = "produkti.txt";
-    QFile fileName(produkti);
+    QString nalepke = "nalepke.txt";
+    QFile fileName(nalepke);
 
     if(!fileName.open(QFile::WriteOnly | QFile::Append))
     {
-        qDebug() << "Error opening fileName for writing in on_pushButton_shraniNalepko_clicked";
+        Error(6);
         return;
     }
 
@@ -508,7 +537,7 @@ void MainWindow::on_actionO_programu_triggered()
     QIcon icon(":icons/about.ico");
     dialog->setWindowTitle("O programu");
     dialog->setWindowIcon(icon);
-    label->setText("Program za shranjevanje in tiskanje nalepk.\nTiskalnik Rollo.\n\nIzdelal: Nejc Sedovnik\nLeto: April 2020\nVerzija: 1.0");
+    label->setText("Program za shranjevanje in tiskanje nalepk.\nTiskalnik Rollo.\n\nIzdelal: Nejc Sedovnik\nLeto: April 2020\nVerzija: " + m_verzija);
     layout->addWidget(label);
     dialog->setLayout(layout);
     dialog->exec();

@@ -3,19 +3,15 @@
 
 #include <QMainWindow>
 #include <QFile>
-#include <QDebug>
+#include <QDialog>
+#include <QTextStream>
+#include <QFileInfo>
 #include <QTreeWidgetItem>
 #include <QTextDocument>
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
-#include <QDesktopServices>
 #include <QDate>
 #include <QKeyEvent>
-#include <QColor>
-#include <QPrintDialog>
-#include <QTextEdit>
-#include <QFileInfo>
-#include <QFileDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,6 +30,7 @@ public:
     void Nalepka();
     void keyReleaseEvent(QKeyEvent*);
     void ProduktCheck(QString, QString);
+    void Error(int);
 
 private slots:
     void on_actionIzhod_triggered();
@@ -54,5 +51,6 @@ private:
     bool m_isClicked;
     QString m_id;
     QString m_naziv;
+    QString m_verzija;
 };
 #endif // MAINWINDOW_H

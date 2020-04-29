@@ -9,5 +9,6 @@
         <file>elraseti.png</file>
         <file>info.png</file>
         <file>print.ico</file>
+        <file>error.ico</file>
     </qresource>
 </RCC>
