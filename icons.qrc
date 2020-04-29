@@ -9,5 +9,6 @@
         <file>print.ico</file>
         <file>error.ico</file>
         <file>delete.ico</file>
+        <file>new.ico</file>
     </qresource>
 </RCC>

@@ -360,14 +360,14 @@ void MainWindow::Error(int numError)
     dialog->setWindowIcon(icon);
     switch (numError)
     {
-        case 0: label->setText("fileName v funkciji Read() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
-        case 1: label->setText("fileName v funkciji Search() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
-        case 2: label->setText("fileName v funkciji ProductCheck() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
-        case 3: label->setText("fileName v funkciji on_actionDelete_triggered() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
-        case 4: label->setText("fileName v funkciji on_actionDelete_triggered() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
-        case 5: label->setText("fileName v funkciji on_actionDelete_triggered() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
-        case 6: label->setText("fileName v funkciji on_actionShrani_nalepko_triggered() ne obstaja! ErrorNum: " + QString(QString::number(numError))); break;
-        default: label->setText("Neznana napaka"); break;
+        case 0: label->setText("ErrorNum: " + QString(QString::number(numError)) + "\nfileName v funkciji Read() ne obstaja!\n Znova zaženi program!"); break;
+        case 1: label->setText("ErrorNum: " + QString(QString::number(numError)) + "\nfileName v funkciji Search() ne obstaja!\n Znova zaženi program!"); break;
+        case 2: label->setText("ErrorNum: " + QString(QString::number(numError)) + "\nfileName v funkciji ProductCheck() ne obstaja!\n Znova zaženi program!"); break;
+        case 3: label->setText("ErrorNum: " + QString(QString::number(numError)) + "\nfileName v funkciji on_actionDelete_triggered() ne obstaja!\n Znova zaženi program!"); break;
+        case 4: label->setText("ErrorNum: " + QString(QString::number(numError)) + "\nfileName v funkciji on_actionDelete_triggered() ne obstaja!\n Znova zaženi program!"); break;
+        case 5: label->setText("ErrorNum: " + QString(QString::number(numError)) + "\nfileName v funkciji on_actionDelete_triggered() ne obstaja!\n Znova zaženi program!"); break;
+        case 6: label->setText("ErrorNum: " + QString(QString::number(numError)) + "\nfileName v funkciji on_actionShrani_nalepko_triggered() ne obstaja!\n Znova zaženi program!"); break;
+        default: label->setText("Neznana napaka!\n Znova zaženi program!"); break;
     }
     layout->addWidget(label);
     dialog->setLayout(layout);
@@ -505,6 +505,9 @@ void MainWindow::on_actionDelete_triggered()
     ui->lineEdit_IDprodukta->clear();
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
+    ui->pushButton_natisni->setDisabled(true);
+    ui->actionPrint->setDisabled(true);
+    ui->actionShrani_nalepko->setDisabled(true);
     Read();
     ui->statusbar->showMessage("Nalepka izbrisana", 3000);
 }
@@ -547,6 +550,7 @@ void MainWindow::on_actionPrint_triggered()
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
     ui->pushButton_shraniNalepko->setDisabled(true);
+    ui->pushButton_natisni->setDisabled(true);
     ui->lineEdit_IDprodukta->setFocus();
     ui->statusbar->showMessage("Nalepka se tiska", 3000);
 }
