@@ -277,6 +277,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
         ui->lineEdit_IDprodukta->clear();
         ui->lineEdit_nazivProdukta->clear();
         ui->lineEdit_kolicina->clear();
+        ui->actionPrint->setDisabled(true);
+        ui->actionShrani_nalepko->setDisabled(true);
+        ui->pushButton_natisni->setDisabled(true);
         ui->lineEdit_IDprodukta->setFocus();
     }
 }
