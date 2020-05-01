@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
     ui->lineEdit_opombe->clear();
+    ui->lineEdit_opombe->setMaxLength(2950);
     ui->pushButton_shraniNalepko->setDisabled(true);
     ui->pushButton_natisni->setDisabled(true);
     ui->actionPrint->setDisabled(true);
