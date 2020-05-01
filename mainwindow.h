@@ -13,6 +13,14 @@
 #include <QDate>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QPainter>
+
+#include <array>
+#include <cstdint>
+#include <stdexcept>
+#include <string>
+#include <vector>
+#include "QrCode.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -32,6 +40,7 @@ public:
     void keyReleaseEvent(QKeyEvent*);
     void ProduktCheck(QString, QString);
     void Error(int);
+    void paintQR(QPainter &painter, const QSize sz, const QString &data, QColor fg);
 
 private slots:
     void on_actionIzhod_triggered();

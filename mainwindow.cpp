@@ -1,16 +1,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "QrCode.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.1"), m_verzijaLabel(new QLabel(this))
+    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.2"), m_verzijaLabel(new QLabel(this))
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
+    MainWindow::setWindowIcon(icon);
     this->setWindowIcon(icon);
     this->setWindowTitle("Tiskanje nalepk");
     ui->lineEdit_IDprodukta->setFocus();
-    MainWindow::setWindowIcon(icon);
     ui->treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->treeWidget->setColumnCount(2);
     ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_IDprodukta->clear();
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
+    ui->lineEdit_opombe->clear();
     ui->pushButton_shraniNalepko->setDisabled(true);
     ui->pushButton_natisni->setDisabled(true);
     ui->actionPrint->setDisabled(true);
@@ -223,9 +225,93 @@ void MainWindow::Nalepka()
              "</div>"
          "</table>";
 
+    QString text_nalepka_opombe =
+        /**************************** NALEPKA *********************************/
+        "<font color='#000000'>"
+        "<table align='center' width='100%' height='100%'>"
+            "<div align='center'>"
+                "<tr>"
+                    "<th>"
+                        "<font size='4'>Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela"
+                    "</th>"
+                "</tr>"
+            "</div>"
+            "<div align='center'>"
+                "<tr>"
+                    "<th>"
+                        "<font size=6><b>LIST IZDELKA</b>"
+                    "</th>"
+                "</tr>"
+            "</div>"
+        "</table>"
+        "<table border=1 align='center' width='100%' height='100%'>"
+            "<div align='center'>"
+                "<tr>"
+                    "<th>"
+                        "<p align='center'>"
+                            "<font size='4'><b>Datum izdelave:</b>"
+                        "</p>"
+                    "</th>"
+                    "<th>"
+                        "<font size='4'>" + QDate::currentDate().toString("d. M. yyyy") + ""
+                    "</th>"
+                "</tr>"
+            "</div>"
+            "<div align='center'>"
+                "<tr>"
+                    "<th>"
+                        "<p align='center'>"
+                            "<font size='4'><b>ID produkta:</b>"
+                        "</p>"
+                    "</th>"
+                    "<th>"
+                        "<font size='4'>" + id + ""
+                    "</th>"
+                "</tr>"
+            "</div>"
+            "<div align='center'>"
+                "<tr>"
+                    "<th>"
+                        "<p align='center'>"
+                            "<font size='4'><b>Naziv produkta:</b>"
+                        "</p>"
+                    "</th>"
+                    "<th>"
+                        "<font size='4'>" + naziv + ""
+                    "</th>"
+                "</tr>"
+             "</div>"
+             "<div align='center'>"
+                 "<tr>"
+                     "<th>"
+                         "<p align='center'>"
+                             "<font size='4'><b>Število kosov:</b>"
+                         "</p>"
+                     "</th>"
+                     "<th>"
+                         "<font size='4' text-align=left>" + kolicina + ""
+                     "</th>"
+                 "</tr>"
+             "</div>"
+           "</table>"
+           "<table align='center' width='100%' height='100%'>"
+             "<div align='center'>"
+                "<tr>"
+                    "<th>"
+                        "<p align='center'>"
+                            "<img src=:icons/elraseti.png width=400 height=200><img src=./image.png width=400 height=200>"
+                        "</p>"
+                    "</th>"
+                "</tr>"
+             "</div>"
+         "</table>";
+
     QTextDocument nalepka;
     QTextCursor cursor(&nalepka);
-    cursor.insertHtml(text_nalepka);
+    if(ui->lineEdit_opombe->text() == "")
+        cursor.insertHtml(text_nalepka);
+    else
+        cursor.insertHtml(text_nalepka_opombe);
 
     QPrinter *printer = new QPrinter(QPrinter::HighResolution);
     printer->setOutputFormat(QPrinter::NativeFormat);
@@ -277,6 +363,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
         ui->lineEdit_IDprodukta->clear();
         ui->lineEdit_nazivProdukta->clear();
         ui->lineEdit_kolicina->clear();
+        ui->lineEdit_opombe->clear();
         ui->actionPrint->setDisabled(true);
         ui->actionShrani_nalepko->setDisabled(true);
         ui->pushButton_natisni->setDisabled(true);
@@ -403,6 +490,7 @@ void MainWindow::on_lineEdit_IDprodukta_textChanged(const QString &arg1)
     {
         ui->treeWidget->clear();
         ui->lineEdit_kolicina->clear();
+        ui->lineEdit_opombe->clear();
         Search(arg1.toUpper(), ui->lineEdit_nazivProdukta->text().toUpper());
         ProduktCheck(arg1.toUpper(), ui->lineEdit_nazivProdukta->text().toUpper());
     }
@@ -427,6 +515,7 @@ void MainWindow::on_lineEdit_nazivProdukta_textChanged(const QString &arg1)
     {
         ui->treeWidget->clear();
         ui->lineEdit_kolicina->clear();
+        ui->lineEdit_opombe->clear();
         Search(ui->lineEdit_IDprodukta->text().toUpper(), arg1.toUpper());
         ProduktCheck(ui->lineEdit_IDprodukta->text().toUpper(), arg1.toUpper());
     }
@@ -505,6 +594,7 @@ void MainWindow::on_actionDelete_triggered()
     ui->lineEdit_IDprodukta->clear();
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
+    ui->lineEdit_opombe->clear();
     ui->pushButton_natisni->setDisabled(true);
     ui->actionPrint->setDisabled(true);
     ui->actionShrani_nalepko->setDisabled(true);
@@ -545,10 +635,15 @@ void MainWindow::on_actionShrani_nalepko_triggered()
 
 void MainWindow::on_actionPrint_triggered()
 {
+    QPixmap map(100,100);
+    QPainter painter(&map);
+    paintQR(painter,QSize(100,100),ui->lineEdit_opombe->text(), QColor("black"));
+    map.save("image.png");
     Nalepka();
     ui->lineEdit_IDprodukta->clear();
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
+    ui->lineEdit_opombe->clear();
     ui->pushButton_shraniNalepko->setDisabled(true);
     ui->pushButton_natisni->setDisabled(true);
     ui->lineEdit_IDprodukta->setFocus();
@@ -567,4 +662,42 @@ void MainWindow::on_actionO_programu_triggered()
     layout->addWidget(label);
     dialog->setLayout(layout);
     dialog->exec();
+}
+
+void MainWindow::paintQR(QPainter &painter, const QSize sz, const QString &data, QColor fg)
+{
+    char *str=data.toUtf8().data();
+    qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(str, qrcodegen::QrCode::Ecc::HIGH);
+    int sizeOf = qr.getInt();
+    const int s=sizeOf>0?sizeOf:1;
+    const double w=sz.width();
+    const double h=sz.height();
+    const double aspect=w/h;
+    const double size=((aspect>1.0)?h:w);
+    const double scale=size/(s+2);
+
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(Qt::white);
+    for(int y=0; y<400; y++)
+    {
+        for(int x=0; x<400; x++)
+        {
+            QRectF r(x, y, 1, 1);
+            painter.drawRects(&r,1);
+        }
+    }
+    painter.setBrush(fg);
+    for(int y=0; y<s; y++)
+    {
+        for(int x=0; x<s; x++)
+        {
+            const int color = qr.getModule(x, y);
+            if(0x0!=color)
+            {
+                const double rx1=(x+1)*scale, ry1=(y+1)*scale;
+                QRectF r(rx1, ry1, scale, scale);
+                painter.drawRects(&r,1);
+            }
+        }
+    }
 }
