@@ -268,6 +268,7 @@
     <property name="title">
      <string>Meni</string>
     </property>
+    <addaction name="actionNov_napis"/>
     <addaction name="actionPrint"/>
     <addaction name="actionShrani_nalepko"/>
     <addaction name="separator"/>
@@ -342,6 +343,15 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionNov_napis">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/new.ico</normaloff>:/icons/new.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Nov napis...</string>
    </property>
   </action>
  </widget>
