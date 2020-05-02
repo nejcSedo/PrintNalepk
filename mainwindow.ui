@@ -348,10 +348,13 @@
   <action name="actionNov_napis">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/new.ico</normaloff>:/icons/new.ico</iconset>
+     <normaloff>:/icons/elraseti.png</normaloff>:/icons/elraseti.png</iconset>
    </property>
    <property name="text">
-    <string>Nov napis...</string>
+    <string>Qr koda...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

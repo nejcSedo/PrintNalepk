@@ -20,14 +20,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     QrCode.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    novanalepka.cpp
 
 HEADERS += \
     QrCode.hpp \
-    mainwindow.h
+    mainwindow.h \
+    novanalepka.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    novanalepka.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

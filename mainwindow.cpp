@@ -1,10 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "QrCode.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.2"), m_verzijaLabel(new QLabel(this))
+    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.3"), m_verzijaLabel(new QLabel(this))
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
@@ -701,4 +700,11 @@ void MainWindow::paintQR(QPainter &painter, const QSize sz, const QString &data,
             }
         }
     }
+}
+
+void MainWindow::on_actionNov_napis_triggered()
+{
+    novaNalepka *ustvariNalepko = new novaNalepka(this);
+    ustvariNalepko->setModal(true);
+    ustvariNalepko->exec();
 }

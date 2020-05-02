@@ -14,13 +14,8 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QPainter>
-
-#include <array>
-#include <cstdint>
-#include <stdexcept>
-#include <string>
-#include <vector>
 #include "QrCode.hpp"
+#include "novanalepka.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -43,17 +38,18 @@ public:
     void paintQR(QPainter &painter, const QSize sz, const QString &data, QColor fg);
 
 private slots:
-    void on_actionIzhod_triggered();
     void on_pushButton_shraniNalepko_clicked();
+    void on_pushButton_natisni_clicked();
     void on_lineEdit_IDprodukta_textChanged(const QString &arg1);
     void on_lineEdit_nazivProdukta_textChanged(const QString &arg1);
-    void on_pushButton_natisni_clicked();
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
     void on_treeWidget_customContextMenuRequested(const QPoint &pos);
+    void on_actionIzhod_triggered();
     void on_actionDelete_triggered();
     void on_actionShrani_nalepko_triggered();
     void on_actionPrint_triggered();
     void on_actionO_programu_triggered();
+    void on_actionNov_napis_triggered();
 
 private:
     Ui::MainWindow *ui;
