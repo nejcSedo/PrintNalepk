@@ -91,15 +91,16 @@ void novaNalepka::on_pushButton_natisni_clicked()
     printer->setPageSize(QPrinter::A7);
     printer->setOrientation(QPrinter::Landscape);
     printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
-    printer->setFullPage(false);
-    printer->setOutputFormat(QPrinter::PdfFormat);
-    QPainter painter(printer);
-    const QPointF pt(qreal(4900/2),qreal(700));
-    painter.drawRect(5,5,4820,3370);
-    painter.setFont(QFont("Tahoma",9));
-    painter.drawText(200,200,"Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela");
+    printer->setFullPage(true);
+    printer->setOutputFormat(QPrinter::NativeFormat);
 
+    QPainter painter(printer);
+    const QPointF pt(qreal(820/2),qreal(200));
+    painter.drawRect(5,5,820,570);
+    painter.setFont(QFont("Tahoma",9));
+    painter.drawText(50,80,"Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela");
     painter.setFont(QFont("Tahoma",35));
+
     if(ui->lineEdit_napis->text().length() > 14)
         drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "PREBERI QR");
     else
@@ -109,8 +110,8 @@ void novaNalepka::on_pushButton_natisni_clicked()
     QPainter painterImage(&map);
     paintQR(painterImage,QSize(100,100),ui->lineEdit_napis->text(), QColor("black"));
     map.save("image.png");
-    painter.drawPixmap(1500,1300,2000,2000, map);
-
+    painter.drawPixmap(270,270,300,300, map);
+    painter.end();
     QTextDocument nalepka;
     QPrintDialog printDialog(printer, this);
 
@@ -118,5 +119,8 @@ void novaNalepka::on_pushButton_natisni_clicked()
     {
         nalepka.print(printer);
     }
-    painter.end();
-}
+
+    ui->lineEdit_napis->clear();
+    ui->pushButton_natisni->setDisabled(true);
+    ui->lineEdit_napis->setFocus();
+    }
