@@ -3,12 +3,15 @@
 
 novaNalepka::novaNalepka(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::novaNalepka)
+    ui(new Ui::novaNalepka), m_nalepkaCentimeter(75)
 {
     ui->setupUi(this);
     this->setWindowTitle("Qr koda");
     ui->lineEdit_napis->setMaxLength(2500);
     ui->pushButton_natisni->setDisabled(true);
+    ui->spinBox_sirinaNalepke->setValue(11);
+    ui->spinBox_visinaNalepke->setValue(8);
+    ui->lineEdit_napis->setFocus();
 }
 
 novaNalepka::~novaNalepka()
@@ -92,35 +95,45 @@ void novaNalepka::on_pushButton_natisni_clicked()
     printer->setOrientation(QPrinter::Landscape);
     printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
     printer->setFullPage(true);
+    //printer->setOutputFormat(QPrinter::NativeFormat);
     printer->setOutputFormat(QPrinter::NativeFormat);
+    int sirinaNalepke(ui->spinBox_sirinaNalepke->value());
+    int visinaNalepke(ui->spinBox_visinaNalepke->value());
 
     QPainter painter(printer);
-    const QPointF pt(qreal(820/2),qreal(200));
-    painter.drawRect(5,5,820,570);
-    painter.setFont(QFont("Tahoma",9));
-    painter.drawText(50,80,"Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela");
-    painter.setFont(QFont("Tahoma",35));
+    painter.drawRect(m_nalepkaCentimeter/6,m_nalepkaCentimeter/6,sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/6*2),visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/6*2));
 
+    painter.setFont(QFont("Tahoma",9));
+    const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2));
+    drawText(painter, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela");
+
+    painter.setFont(QFont("Tahoma",35));
+    const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
     if(ui->lineEdit_napis->text().length() > 14)
         drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "PREBERI QR");
     else
         drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper());
 
-    QPixmap map(100,100);
+    QPixmap map(4*m_nalepkaCentimeter/3,4*m_nalepkaCentimeter/3);
     QPainter painterImage(&map);
-    paintQR(painterImage,QSize(100,100),ui->lineEdit_napis->text(), QColor("black"));
+    paintQR(painterImage,QSize(4*m_nalepkaCentimeter/3,4*m_nalepkaCentimeter/3),ui->lineEdit_napis->text(), QColor("black"));
     map.save("image.png");
-    painter.drawPixmap(270,270,300,300, map);
+    painter.drawPixmap(m_nalepkaCentimeter*3,m_nalepkaCentimeter*3,m_nalepkaCentimeter*4,m_nalepkaCentimeter*4, map);
     painter.end();
+
     QTextDocument nalepka;
     QPrintDialog printDialog(printer, this);
 
     if (printDialog.exec() == QDialog::Accepted)
     {
+        QString output = "./nalepka.pdf";
+        printer->setOutputFileName(output);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(output));
         nalepka.print(printer);
     }
 
     ui->lineEdit_napis->clear();
     ui->pushButton_natisni->setDisabled(true);
     ui->lineEdit_napis->setFocus();
-    }
+
+}

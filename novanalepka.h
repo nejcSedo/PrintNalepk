@@ -28,11 +28,11 @@ public:
 
 private slots:
     void on_lineEdit_napis_textChanged(const QString &arg1);
-
     void on_pushButton_natisni_clicked();
 
 private:
     Ui::novaNalepka *ui;
+    int m_nalepkaCentimeter;
 };
 
 #endif // NOVANALEPKA_H
