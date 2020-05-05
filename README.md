@@ -13,4 +13,8 @@ Dodan generator Qr kode
 # v1.4
 Sprememba nalepke iz html v TextDocument, spremenjen slog
 
+# v1.4.5
+Spremembe v kodi, dodano opozorilo za predolgo besedilo v opombah in napisu za Qr kodo.
+Optimizacija kode.
+
 # Nejc Sedovnik, April 2020

@@ -2,19 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QFile>
-#include <QDialog>
-#include <QTextStream>
-#include <QFileInfo>
-#include <QTreeWidgetItem>
-#include <QTextDocument>
-#include <QtPrintSupport/QPrinter>
-#include <QtPrintSupport/QPrintDialog>
-#include <QDate>
-#include <QKeyEvent>
-#include <QLabel>
-#include <QPainter>
-#include "QrCode.hpp"
 #include "novanalepka.h"
 
 QT_BEGIN_NAMESPACE
@@ -31,27 +18,29 @@ public:
     void AddRoot(QString, QString);
     void Read();
     void Search(QString, QString);
-    void drawText(QPainter & painter, qreal x, qreal y, Qt::Alignment flags, const QString & text, QRectF * boundingRect);
-    void drawText(QPainter & painter, const QPointF & point, Qt::Alignment flags, const QString & text, QRectF * boundingRect);
+    void drawText(QPainter &, qreal, qreal, Qt::Alignment, const QString &, QRectF *);
+    void drawText(QPainter &, const QPointF &, Qt::Alignment, const QString &, QRectF *);
     void Nalepka();
     void keyReleaseEvent(QKeyEvent*);
     void ProduktCheck(QString, QString);
-    void Error(int);
-    void paintQR(QPainter &painter, const QSize sz, const QString &data, QColor fg);
+    void Error(short);
+    void paintQR(QPainter &, const QSize, const QString &, QColor);
 
 private slots:
     void on_pushButton_shraniNalepko_clicked();
     void on_pushButton_natisni_clicked();
-    void on_lineEdit_IDprodukta_textChanged(const QString &arg1);
-    void on_lineEdit_nazivProdukta_textChanged(const QString &arg1);
-    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
-    void on_treeWidget_customContextMenuRequested(const QPoint &pos);
+    void on_lineEdit_IDprodukta_textChanged(const QString &);
+    void on_lineEdit_nazivProdukta_textChanged(const QString &);
+    void on_treeWidget_itemClicked(QTreeWidgetItem *, int);
+    void on_treeWidget_customContextMenuRequested(const QPoint &);
     void on_actionIzhod_triggered();
     void on_actionDelete_triggered();
     void on_actionShrani_nalepko_triggered();
     void on_actionPrint_triggered();
     void on_actionO_programu_triggered();
     void on_actionNov_napis_triggered();
+
+    void on_textEdit_opombe_textChanged();
 
 private:
     Ui::MainWindow *ui;

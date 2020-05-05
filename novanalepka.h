@@ -1,14 +1,16 @@
 #ifndef NOVANALEPKA_H
 #define NOVANALEPKA_H
 
-#include <QDialog>
 #include <QPainter>
-#include <QTextDocument>
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
-#include <QDesktopServices>
 #include <QDir>
-#include <QSizeF>
+#include <QMessageBox>
+#include <QTextStream>
+#include <QTreeWidgetItem>
+#include <QDate>
+#include <QKeyEvent>
+#include <QLabel>
 #include "QrCode.hpp"
 
 namespace Ui {
@@ -22,18 +24,19 @@ class novaNalepka : public QDialog
 public:
     explicit novaNalepka(QWidget *parent = nullptr);
     ~novaNalepka();
-    void paintQR(QPainter &painter, const QSize sz, const QString &data, QColor fg);
-    void drawText(QPainter & painter, qreal x, qreal y, Qt::Alignment flags, const QString & text, QRectF * boundingRect);
-    void drawText(QPainter & painter, const QPointF & point, Qt::Alignment flags, const QString & text, QRectF * boundingRect);
+    void paintQR(QPainter &, const QSize, const QString &, QColor);
+    void drawText(QPainter &, qreal, qreal, Qt::Alignment, const QString &, QRectF *);
+    void drawText(QPainter &, const QPointF &, Qt::Alignment, const QString &, QRectF *);
 
 private slots:
-    void on_lineEdit_napis_textChanged(const QString &arg1);
     void on_pushButton_natisni_clicked();
+    void on_textEdit_napis_textChanged();
 
 private:
     Ui::novaNalepka *ui;
     int m_nalepkaCentimeter;
     int m_qrVelikost;
+    QString m_napis;
 };
 
 #endif // NOVANALEPKA_H

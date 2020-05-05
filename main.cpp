@@ -4,22 +4,20 @@
 
 int main(int argc, char *argv[])
 {
-    QString fileName("./nalepke.txt");
-    QString fileNameRelease("./release/nalepke.txt");
-    QFile file(fileName);
-    QFile fileRelease(fileNameRelease);
-
-    if(!QFileInfo::exists(fileName))
+    if(!QFileInfo::exists("./nalepke.txt"))
     {
-        file.open(QIODevice::ReadWrite | QIODevice::Text);
+        QFile file("./nalepke.txt");
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
         file.write("Seznam nalepk:\n");
+        file.flush();
         file.close();
     }
-
-    if(!QFileInfo::exists(fileNameRelease))
+    if(!QFileInfo::exists("./release/nalepke.txt"))
     {
-        file.open(QIODevice::ReadWrite | QIODevice::Text);
+        QFile file("./release/nalepke.txt");
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
         file.write("Seznam nalepk:\n");
+        file.flush();
         file.close();
     }
 
