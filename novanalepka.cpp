@@ -3,14 +3,15 @@
 
 novaNalepka::novaNalepka(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::novaNalepka), m_nalepkaCentimeter(75)
+    ui(new Ui::novaNalepka), m_nalepkaCentimeter(75), m_qrVelikost(m_nalepkaCentimeter*1.33)
 {
     ui->setupUi(this);
     this->setWindowTitle("Qr koda");
     ui->lineEdit_napis->setMaxLength(2500);
     ui->pushButton_natisni->setDisabled(true);
-    ui->spinBox_sirinaNalepke->setValue(11);
-    ui->spinBox_visinaNalepke->setValue(8);
+    ui->comboBox_seznamNalepk->addItem("11x8");
+    ui->comboBox_seznamNalepk->addItem("10x4");
+    ui->comboBox_seznamNalepk->setDisabled(true);
     ui->lineEdit_napis->setFocus();
 }
 
@@ -95,43 +96,70 @@ void novaNalepka::on_pushButton_natisni_clicked()
     printer->setOrientation(QPrinter::Landscape);
     printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
     printer->setFullPage(true);
-    //printer->setOutputFormat(QPrinter::NativeFormat);
     printer->setOutputFormat(QPrinter::NativeFormat);
-    int sirinaNalepke(ui->spinBox_sirinaNalepke->value());
-    int visinaNalepke(ui->spinBox_visinaNalepke->value());
-
-    QPainter painter(printer);
-    painter.drawRect(m_nalepkaCentimeter/6,m_nalepkaCentimeter/6,sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/6*2),visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/6*2));
-
-    painter.setFont(QFont("Tahoma",9));
-    const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2));
-    drawText(painter, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela");
-
-    painter.setFont(QFont("Tahoma",35));
-    const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
-    if(ui->lineEdit_napis->text().length() > 14)
-        drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "PREBERI QR");
-    else
-        drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper());
-
-    QPixmap map(4*m_nalepkaCentimeter/3,4*m_nalepkaCentimeter/3);
-    QPainter painterImage(&map);
-    paintQR(painterImage,QSize(4*m_nalepkaCentimeter/3,4*m_nalepkaCentimeter/3),ui->lineEdit_napis->text(), QColor("black"));
-    map.save("image.png");
-    painter.drawPixmap(m_nalepkaCentimeter*3,m_nalepkaCentimeter*3,m_nalepkaCentimeter*4,m_nalepkaCentimeter*4, map);
-    painter.end();
+    int sirinaNalepke(11);
+    int visinaNalepke(8);
+    if(ui->comboBox_seznamNalepk->currentIndex() == 1)
+    {
+        sirinaNalepke = 10;
+        visinaNalepke = 4;
+    }
 
     QTextDocument nalepka;
+    QPainter painter(printer);
+    painter.drawRect(m_nalepkaCentimeter/6,m_nalepkaCentimeter/6,sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/8*2),visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/5*2));
+
+    painter.setFont(QFont("Tahoma",9));
+    if(ui->comboBox_seznamNalepk->currentIndex() == 0)
+    {
+        const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter));
+        drawText(painter, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela");
+    }
+    else if(ui->comboBox_seznamNalepk->currentIndex() == 1)
+    {
+        const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2 - (m_nalepkaCentimeter)),qreal(m_nalepkaCentimeter/2));
+        drawText(painter, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
+    }
+
+
+    painter.setFont(QFont("Tahoma",35));
+    if(ui->comboBox_seznamNalepk->currentIndex() == 0)
+    {
+        const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
+        if(ui->lineEdit_napis->text().length() > 14)
+            drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "PREBERI QR");
+        else
+            drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper());
+    }
+    else if(ui->comboBox_seznamNalepk->currentIndex() == 1)
+    {
+        const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2 - (m_nalepkaCentimeter*2)),qreal(m_nalepkaCentimeter*2));
+        if(ui->lineEdit_napis->text().length() > 14)
+            drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "PREBERI QR");
+        else
+            drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper());
+
+    }
+
+    QPixmap map(m_qrVelikost,m_qrVelikost);
+    QPainter painterImage(&map);
+    paintQR(painterImage,QSize(m_qrVelikost,m_qrVelikost),ui->lineEdit_napis->text(), QColor("black"));
+
+    if(ui->comboBox_seznamNalepk->currentIndex() == 0)
+    {
+        painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map);
+    }
+    else if(ui->comboBox_seznamNalepk->currentIndex() == 1)
+    {
+        painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter))-m_qrVelikost,m_nalepkaCentimeter,m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map);
+    }
+
     QPrintDialog printDialog(printer, this);
 
     if (printDialog.exec() == QDialog::Accepted)
-    {
-        QString output = "./nalepka.pdf";
-        printer->setOutputFileName(output);
-        QDesktopServices::openUrl(QUrl::fromLocalFile(output));
         nalepka.print(printer);
-    }
 
+    painter.end();
     ui->lineEdit_napis->clear();
     ui->pushButton_natisni->setDisabled(true);
     ui->lineEdit_napis->setFocus();

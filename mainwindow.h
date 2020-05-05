@@ -31,6 +31,8 @@ public:
     void AddRoot(QString, QString);
     void Read();
     void Search(QString, QString);
+    void drawText(QPainter & painter, qreal x, qreal y, Qt::Alignment flags, const QString & text, QRectF * boundingRect);
+    void drawText(QPainter & painter, const QPointF & point, Qt::Alignment flags, const QString & text, QRectF * boundingRect);
     void Nalepka();
     void keyReleaseEvent(QKeyEvent*);
     void ProduktCheck(QString, QString);
@@ -59,5 +61,7 @@ private:
     QString m_naziv;
     QString m_verzija;
     QLabel *m_verzijaLabel;
+    int m_nalepkaCentimeter;
+    int m_qrVelikost;
 };
 #endif // MAINWINDOW_H

@@ -10,4 +10,7 @@ Dodane opombe
 # v1.3
 Dodan generator Qr kode
 
+# v1.4
+Sprememba nalepke iz html v TextDocument, spremenjen slog
+
 # Nejc Sedovnik, April 2020

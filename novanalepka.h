@@ -33,6 +33,7 @@ private slots:
 private:
     Ui::novaNalepka *ui;
     int m_nalepkaCentimeter;
+    int m_qrVelikost;
 };
 
 #endif // NOVANALEPKA_H

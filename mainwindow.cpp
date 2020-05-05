@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.3"), m_verzijaLabel(new QLabel(this))
+    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.4"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeter(75), m_qrVelikost(m_nalepkaCentimeter*1.33)
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_nazivProdukta->clear();
     ui->lineEdit_kolicina->clear();
     ui->lineEdit_opombe->clear();
-    ui->lineEdit_opombe->setMaxLength(2950);
+    ui->lineEdit_opombe->setMaxLength(2500);
     ui->pushButton_shraniNalepko->setDisabled(true);
     ui->pushButton_natisni->setDisabled(true);
     ui->actionPrint->setDisabled(true);
@@ -134,208 +134,88 @@ void MainWindow::Search(QString id, QString naziv)
     fileName.close();
 }
 
+void MainWindow::drawText(QPainter & painter, qreal x, qreal y, Qt::Alignment flags, const QString & text, QRectF * boundingRect = 0)
+{
+   const qreal size = 32767.0;
+   QPointF corner(x, y - size);
+   if (flags & Qt::AlignHCenter) corner.rx() -= size/2.0;
+   else if (flags & Qt::AlignRight) corner.rx() -= size;
+   if (flags & Qt::AlignVCenter) corner.ry() += size/2.0;
+   else if (flags & Qt::AlignTop) corner.ry() += size;
+   else flags |= Qt::AlignBottom;
+   QRectF rect{corner.x(), corner.y(), size, size};
+   painter.drawText(rect, flags, text, boundingRect);
+}
+
+void MainWindow::drawText(QPainter & painter, const QPointF & point, Qt::Alignment flags, const QString & text, QRectF * boundingRect = {})
+{
+   drawText(painter, point.x(), point.y(), flags, text, boundingRect);
+}
+
 void MainWindow::Nalepka()
 {
     QString id(ui->lineEdit_IDprodukta->text().toUpper());
     QString naziv(ui->lineEdit_nazivProdukta->text().toUpper());
     QString kolicina("");
+
     if(ui->lineEdit_kolicina->text() == "")
         kolicina = "/";
     else
         kolicina = ui->lineEdit_kolicina->text().toUpper();
 
-    QString text_nalepka =
-        /**************************** NALEPKA *********************************/
-        "<font color='#000000'>"
-        "<table align='center' width='100%' height='100%'>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<font size='4'>Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela"
-                    "</th>"
-                "</tr>"
-            "</div>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<font size=6><b>LIST IZDELKA</b>"
-                    "</th>"
-                "</tr>"
-            "</div>"
-        "</table>"
-        "<table border=1 align='center' width='100%' height='100%'>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<p align='center'>"
-                            "<font size='4'><b>Datum izdelave:</b>"
-                        "</p>"
-                    "</th>"
-                    "<th>"
-                        "<font size='4'>" + QDate::currentDate().toString("d. M. yyyy") + ""
-                    "</th>"
-                "</tr>"
-            "</div>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<p align='center'>"
-                            "<font size='4'><b>ID produkta:</b>"
-                        "</p>"
-                    "</th>"
-                    "<th>"
-                        "<font size='4'>" + id + ""
-                    "</th>"
-                "</tr>"
-            "</div>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<p align='center'>"
-                            "<font size='4'><b>Naziv produkta:</b>"
-                        "</p>"
-                    "</th>"
-                    "<th>"
-                        "<font size='4'>" + naziv + ""
-                    "</th>"
-                "</tr>"
-             "</div>"
-             "<div align='center'>"
-                 "<tr>"
-                     "<th>"
-                         "<p align='center'>"
-                             "<font size='4'><b>Število kosov:</b>"
-                         "</p>"
-                     "</th>"
-                     "<th>"
-                         "<font size='4' text-align=left>" + kolicina + ""
-                     "</th>"
-                 "</tr>"
-             "</div>"
-           "</table>"
-           "<table align='center' width='100%' height='100%'>"
-             "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<p align='center'>"
-                            "<img src=:icons/elraseti.png width=400 height=200>"
-                        "</p>"
-                    "</th>"
-                "</tr>"
-             "</div>"
-         "</table>";
-
-    QString text_nalepka_opombe =
-        /**************************** NALEPKA *********************************/
-        "<font color='#000000'>"
-        "<table align='center' width='100%' height='100%'>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<font size='4'>Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela"
-                    "</th>"
-                "</tr>"
-            "</div>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<font size=6><b>LIST IZDELKA</b>"
-                    "</th>"
-                "</tr>"
-            "</div>"
-        "</table>"
-        "<table border=1 align='center' width='100%' height='100%'>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<p align='center'>"
-                            "<font size='3'><b>Datum izdelave:</b>"
-                        "</p>"
-                    "</th>"
-                    "<th>"
-                        "<font size='3'>" + QDate::currentDate().toString("d. M. yyyy") + ""
-                    "</th>"
-                "</tr>"
-            "</div>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<p align='center'>"
-                            "<font size='3'><b>ID produkta:</b>"
-                        "</p>"
-                    "</th>"
-                    "<th>"
-                        "<font size='3'>" + id + ""
-                    "</th>"
-                "</tr>"
-            "</div>"
-            "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<p align='center'>"
-                            "<font size='3'><b>Naziv produkta:</b>"
-                        "</p>"
-                    "</th>"
-                    "<th>"
-                        "<font size='3'>" + naziv + ""
-                    "</th>"
-                "</tr>"
-             "</div>"
-             "<div align='center'>"
-                 "<tr>"
-                     "<th>"
-                         "<p align='center'>"
-                             "<font size='3'><b>Število kosov:</b>"
-                         "</p>"
-                     "</th>"
-                     "<th>"
-                         "<font size='3' text-align=left>" + kolicina + ""
-                     "</th>"
-                 "</tr>"
-             "</div>"
-           "</table>"
-           "<table align='center' width='100%' height='100%'>"
-             "<div align='center'>"
-                "<tr>"
-                    "<th>"
-                        "<p align='center'>"
-                            "<img src=:icons/elraseti.png width=400 height=200><img src=./image.png width=400 height=200>"
-                        "</p>"
-                    "</th>"
-                "</tr>"
-             "</div>"
-         "</table>";
+    QPrinter *printer = new QPrinter(QPrinter::HighResolution);
+    printer->setPageSize(QPrinter::A7);
+    printer->setOrientation(QPrinter::Landscape);
+    printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
+    printer->setFullPage(true);
+    printer->setOutputFormat(QPrinter::NativeFormat);
+    int sirinaNalepke(11);
+    int visinaNalepke(8);
 
     QTextDocument nalepka;
-    QTextCursor cursor(&nalepka);
-    if(ui->lineEdit_opombe->text() == "")
-        cursor.insertHtml(text_nalepka);
-    else
-        cursor.insertHtml(text_nalepka_opombe);
-
-    QPrinter *printer = new QPrinter(QPrinter::HighResolution);
-    printer->setOutputFormat(QPrinter::NativeFormat);
-    printer->setPageSize(QPrinter::A6);
-    printer->setOrientation(QPrinter::Portrait);
-    printer->setFullPage(true);
-
     QSizeF paperSize;
-    qreal left = 0, right = -5, top =-2, bottom = 10, width=1500, height=1100;
-    paperSize.setWidth(width);
-    paperSize.setHeight(height);
-
+    paperSize.setWidth(printer->width());
+    paperSize.setHeight(printer->height()/2);
     nalepka.setPageSize(paperSize);
-    printer->setPageMargins(left, top, right, bottom, QPrinter::Millimeter);
 
-    QFont f(nalepka.defaultFont());
-    f.setPointSize(18);
-    nalepka.setDefaultFont(f);
+    QPainter painter(printer);
+    painter.drawRect(m_nalepkaCentimeter/6,m_nalepkaCentimeter/6,sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/8*2),visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/5*2));
+    painter.setFont(QFont("Tahoma",9));
+    const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter/2));
+    drawText(painter, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra   Seti   d.o.o.,   Andraž   nad   Polzelo   74/a,   3313   Polzela");
+
+    painter.setFont(QFont("Tahoma",16));
+    const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*1.2));
+    drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "LIST IZDELKA");
+
+    painter.setFont(QFont("Tahoma",11));
+    const QPointF pt1(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2));
+    drawText(painter, pt1, Qt::AlignVCenter | Qt::AlignHCenter, "Datum izdelave: " + QDate::currentDate().toString("d. M. yyyy"));
+
+    painter.setFont(QFont("Tahoma",11));
+    const QPointF pt2(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2.5));
+    drawText(painter, pt2, Qt::AlignVCenter | Qt::AlignHCenter, "ID izdelka: " + id);
+
+    painter.setFont(QFont("Tahoma",11));
+    const QPointF pt3(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
+    drawText(painter, pt3, Qt::AlignVCenter | Qt::AlignHCenter, "Naziv izdelka: " + naziv);
+
+    painter.setFont(QFont("Tahoma",11));
+    const QPointF pt4(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3.5));
+    drawText(painter, pt4, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina);
+
+    QPixmap map(m_qrVelikost,m_qrVelikost);
+    QPainter painterImage(&map);
+    paintQR(painterImage,QSize(m_qrVelikost,m_qrVelikost),"---- www.elraseti.si - info@elraseti.si ----  ;" + id + "; " + naziv + "; " + ui->lineEdit_opombe->text(), QColor("black"));
+    painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map);
 
     QPrintDialog printDialog(printer, this);
+
     if (printDialog.exec() == QDialog::Accepted)
-    {
         nalepka.print(printer);
-    }
+
+    printDialog.close();
+    painter.end();
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)
