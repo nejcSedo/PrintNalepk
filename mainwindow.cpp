@@ -560,12 +560,12 @@ void MainWindow::on_actionNov_napis_triggered()
 
 void MainWindow::on_textEdit_opombe_textChanged()
 {
-    if(ui->textEdit_opombe->toPlainText().length() > 100)
+    if(ui->textEdit_opombe->toPlainText().length() > 80)
     {
         QString napis(ui->textEdit_opombe->toPlainText());
         QTextCursor tmpCursor = ui->textEdit_opombe->textCursor();
         napis.chop(1);
-        QMessageBox::warning(this, "Napis predolg", "Napis lahko vsebuje največ 100 črk!");
+        QMessageBox::warning(this, "Napis predolg", "Napis lahko vsebuje največ 80 črk!");
         ui->textEdit_opombe->setPlainText(napis);
         ui->textEdit_opombe->setTextCursor(tmpCursor);
     }
