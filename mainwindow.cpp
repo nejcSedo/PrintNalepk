@@ -206,7 +206,7 @@ void MainWindow::Nalepka()
 
     QPixmap map(m_qrVelikost,m_qrVelikost);
     QPainter painterImage(&map);
-    paintQR(painterImage,QSize(m_qrVelikost,m_qrVelikost),"---- www.elraseti.si - info@elraseti.si ----  ;" + id + "; " + naziv + "; " + ui->lineEdit_opombe->text(), QColor("black"));
+    paintQR(painterImage,QSize(m_qrVelikost,m_qrVelikost),"-- www.elraseti.si ; info@elraseti.si -- ; ID: " + id + "; Naziv: " + naziv + "; Opombe: " + ui->lineEdit_opombe->text(), QColor("black"));
     painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map);
 
     QPrintDialog printDialog(printer, this);
