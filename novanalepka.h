@@ -30,13 +30,14 @@ public:
 
 private slots:
     void on_pushButton_natisni_clicked();
-    void on_textEdit_napis_textChanged();
+    void on_textEdit_qrNapis_textChanged();
+
+    void on_lineEdit_napis_textChanged(const QString &arg1);
 
 private:
     Ui::novaNalepka *ui;
     int m_nalepkaCentimeter;
     int m_qrVelikost;
-    QString m_napis;
 };
 
 #endif // NOVANALEPKA_H

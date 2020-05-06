@@ -3,7 +3,7 @@
 
 novaNalepka::novaNalepka(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::novaNalepka), m_nalepkaCentimeter(75), m_qrVelikost(m_nalepkaCentimeter*1.33), m_napis("")
+    ui(new Ui::novaNalepka), m_nalepkaCentimeter(75), m_qrVelikost(m_nalepkaCentimeter*1.33)
 {
     ui->setupUi(this);
     this->setWindowTitle("Qr koda");
@@ -11,7 +11,8 @@ novaNalepka::novaNalepka(QWidget *parent) :
     ui->comboBox_seznamNalepk->addItem("11x8");
     ui->comboBox_seznamNalepk->addItem("10x4");
     ui->comboBox_seznamNalepk->setDisabled(true);
-    ui->textEdit_napis->setFocus();
+    ui->lineEdit_napis->setMaxLength(14);
+    ui->lineEdit_napis->setFocus();
 }
 
 novaNalepka::~novaNalepka()
@@ -85,16 +86,27 @@ void novaNalepka::on_pushButton_natisni_clicked()
     QTextDocument nalepka;
     QPixmap map(m_qrVelikost,m_qrVelikost);
     QPainter painter(&map);
-    paintQR(painter, QSize(m_qrVelikost, m_qrVelikost), ui->textEdit_napis->toPlainText(), QColor("black"));
+    QString napis("");
+    ui->lineEdit_napis->text() = "" ? napis = "NI PODATKA" : napis = ui->lineEdit_napis->text();
+    ui->textEdit_qrNapis->toPlainText() == "" ? paintQR(painter, QSize(m_qrVelikost, m_qrVelikost), napis, QColor("black")) :
+                                                paintQR(painter, QSize(m_qrVelikost, m_qrVelikost), ui->textEdit_qrNapis->toPlainText(), QColor("black")) ;
     switch(ui->comboBox_seznamNalepk->currentIndex())
     {
-        case 0: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
-        case 1: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter))-m_qrVelikost,m_nalepkaCentimeter,m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
-        default: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
+        case 0: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
+                                   ((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),
+                                   m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
+        case 1: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter))-m_qrVelikost,m_nalepkaCentimeter,
+                                   m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
+        default: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
+                                    ((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),
+                                    m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
     }
     map.save("image.png");
 
-    painter.drawRect(m_nalepkaCentimeter/6,m_nalepkaCentimeter/6,sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/8*2),visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/5*2));
+    painter.drawRect(m_nalepkaCentimeter/6,
+                     m_nalepkaCentimeter/6,
+                     sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/8*2),
+                     visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/5*2));
 
     painter.setFont(QFont("Tahoma",9));
     switch(ui->comboBox_seznamNalepk->currentIndex())
@@ -114,13 +126,13 @@ void novaNalepka::on_pushButton_natisni_clicked()
     switch(ui->comboBox_seznamNalepk->currentIndex())
     {
         case 0: {const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
-                m_napis.length() > 14 ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA") : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, m_napis.toUpper());}
+                ui->lineEdit_napis->text() != "" ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
                 break;
         case 1: {const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2 - (m_nalepkaCentimeter*2)),qreal(m_nalepkaCentimeter*2));
-                m_napis.length() > 14 ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA") : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, m_napis.toUpper());}
+                ui->lineEdit_napis->text() != "" ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
                 break;
         default:{const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
-                m_napis.length() > 14 ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA") : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, m_napis.toUpper());}
+                ui->lineEdit_napis->text() != "" ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
                 break;
     }
 
@@ -134,35 +146,60 @@ void novaNalepka::on_pushButton_natisni_clicked()
         nalepka.print(printer);
 
     painter.end();
-    ui->textEdit_napis->clear();
+    ui->lineEdit_napis->clear();
+    ui->textEdit_qrNapis->clear();
     ui->label_qrcode->clear();
     ui->pushButton_natisni->setDisabled(true);
-    ui->textEdit_napis->setFocus();
+    ui->textEdit_qrNapis->setFocus();
 
 }
 
-void novaNalepka::on_textEdit_napis_textChanged()
+void novaNalepka::on_textEdit_qrNapis_textChanged()
 {
-    if(ui->textEdit_napis->toPlainText() == "")
+    if(ui->textEdit_qrNapis->toPlainText() == "")
     {
         ui->pushButton_natisni->setDisabled(true);
         ui->label_qrcode->clear();
     }
-    else if(ui->textEdit_napis->toPlainText().length() > 100)
+    else if(ui->textEdit_qrNapis->toPlainText().length() > 100)
     {
-        QString napis(ui->textEdit_napis->toPlainText());
-        QTextCursor tmpCursor = ui->textEdit_napis->textCursor();
+        QString napis(ui->textEdit_qrNapis->toPlainText());
+        QTextCursor tmpCursor = ui->textEdit_qrNapis->textCursor();
         napis.chop(1);
-        QMessageBox::warning(this, "Napis predolg", "Napis lahko vsebuje največ 100 črk!");
-        ui->textEdit_napis->setPlainText(napis);
-        ui->textEdit_napis->setTextCursor(tmpCursor);
+        QMessageBox::warning(this, "Qr koda predolga", "Qr koda lahko vsebuje največ 100 črk!");
+        ui->textEdit_qrNapis->setPlainText(napis);
+        ui->textEdit_qrNapis->setTextCursor(tmpCursor);
     }
     else
     {
         ui->pushButton_natisni->setDisabled(false);
         QPixmap map(300,300);
         QPainter painter(&map);
-        paintQR(painter, QSize(300,300), ui->textEdit_napis->toPlainText(), QColor("black"));
+        paintQR(painter, QSize(300,300), ui->textEdit_qrNapis->toPlainText(), QColor("black"));
+        ui->label_qrcode->setPixmap(map);
+    }
+}
+
+void novaNalepka::on_lineEdit_napis_textChanged(const QString &arg1)
+{
+    if(arg1 == "")
+    {
+        ui->pushButton_natisni->setDisabled(true);
+        ui->label_qrcode->clear();
+    }
+    else if(arg1.length() > 14)
+    {
+        QString napis(arg1);
+        napis.chop(1);
+        QMessageBox::warning(this, "Napis predolg", "Napis lahko vsebuje največ 14 črk!");
+        ui->lineEdit_napis->setText(napis);
+    }
+    else
+    {
+        ui->pushButton_natisni->setDisabled(false);
+        QPixmap map(300,300);
+        QPainter painter(&map);
+        paintQR(painter, QSize(300,300), arg1, QColor("black"));
         ui->label_qrcode->setPixmap(map);
     }
 }
