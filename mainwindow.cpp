@@ -163,34 +163,40 @@ void MainWindow::Nalepka()
     QPixmap map(m_qrVelikost,m_qrVelikost);
     QPainter painter(&map);
     paintQR(painter,QSize(m_qrVelikost,m_qrVelikost), qrText + ui->textEdit_opombe->toPlainText(), QColor("black"));
-    painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map);
     map.save("image.png");
+    painter.end();
 
-    painter.drawRect(m_nalepkaCentimeter/6,m_nalepkaCentimeter/6,sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/8*2),visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/5*2));
+    QPainter painterText(printer);
+    painterText.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
+                           ((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),
+                           m_nalepkaCentimeter*3.5,
+                           m_nalepkaCentimeter*3.5, map);
 
-    painter.setFont(QFont("Tahoma",9));
+    painterText.drawRect(m_nalepkaCentimeter/6,
+                         m_nalepkaCentimeter/6,
+                         sirinaNalepke*m_nalepkaCentimeter,
+                         visinaNalepke*m_nalepkaCentimeter);
+
+    painterText.setFont(QFont("Tahoma",9));
     const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter/2));
-    drawText(painter, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra   Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
+    drawText(painterText, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra   Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
 
     painter.setFont(QFont("Tahoma",16));
     const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*1.2));
-    drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "LIST IZDELKA");
+    drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, "LIST IZDELKA");
 
-    painter.setFont(QFont("Tahoma",11));
+    painterText.setFont(QFont("Tahoma",11));
     const QPointF pt1(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2));
-    drawText(painter, pt1, Qt::AlignVCenter | Qt::AlignHCenter, "Datum izdelave: " + QDate::currentDate().toString("d. M. yyyy"));
+    drawText(painterText, pt1, Qt::AlignVCenter | Qt::AlignHCenter, "Datum izdelave: " + QDate::currentDate().toString("d. M. yyyy"));
 
-    painter.setFont(QFont("Tahoma",11));
     const QPointF pt2(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2.5));
-    drawText(painter, pt2, Qt::AlignVCenter | Qt::AlignHCenter, "ID izdelka: " + id);
+    drawText(painterText, pt2, Qt::AlignVCenter | Qt::AlignHCenter, "ID izdelka: " + id);
 
-    painter.setFont(QFont("Tahoma",11));
     const QPointF pt3(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
-    drawText(painter, pt3, Qt::AlignVCenter | Qt::AlignHCenter, "Naziv izdelka: " + naziv);
+    drawText(painterText, pt3, Qt::AlignVCenter | Qt::AlignHCenter, "Naziv izdelka: " + naziv);
 
-    painter.setFont(QFont("Tahoma",11));
     const QPointF pt4(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3.5));
-    drawText(painter, pt4, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina);
+    drawText(painterText, pt4, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina);
 
     QPrintDialog printDialog(printer, this);
     printer->setPageSize(QPrinter::A7);
@@ -198,9 +204,10 @@ void MainWindow::Nalepka()
     printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
     printer->setFullPage(true);
     printer->setOutputFormat(QPrinter::NativeFormat);
+    painterText.end();
     if(printDialog.exec() == QDialog::Accepted)
         nalepka.print(printer);
-    painter.end();
+
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)

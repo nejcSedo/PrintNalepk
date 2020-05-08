@@ -1,5 +1,6 @@
 #include "novanalepka.h"
 #include "ui_novanalepka.h"
+#include <QDebug>
 
 novaNalepka::novaNalepka(QWidget *parent) :
     QDialog(parent),
@@ -90,62 +91,64 @@ void novaNalepka::on_pushButton_natisni_clicked()
     ui->lineEdit_napis->text() = "" ? napis = "NI PODATKA" : napis = ui->lineEdit_napis->text();
     ui->textEdit_qrNapis->toPlainText() == "" ? paintQR(painter, QSize(m_qrVelikost, m_qrVelikost), napis, QColor("black")) :
                                                 paintQR(painter, QSize(m_qrVelikost, m_qrVelikost), ui->textEdit_qrNapis->toPlainText(), QColor("black")) ;
+    painter.end();
+
+    QPainter painterText(printer);
     switch(ui->comboBox_seznamNalepk->currentIndex())
     {
-        case 0: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
+        case 0: painterText.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
                                    ((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),
                                    m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
-        case 1: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter))-m_qrVelikost,m_nalepkaCentimeter,
+        case 1: painterText.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter))-m_qrVelikost,m_nalepkaCentimeter,
                                    m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
-        default: painter.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
+        default: painterText.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
                                     ((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),
                                     m_nalepkaCentimeter*3.5,m_nalepkaCentimeter*3.5, map); break;
     }
     map.save("image.png");
 
-    painter.drawRect(m_nalepkaCentimeter/6,
-                     m_nalepkaCentimeter/6,
-                     sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/8*2),
-                     visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/5*2));
+    painterText.drawRect(m_nalepkaCentimeter/4,
+                     m_nalepkaCentimeter/4,
+                     sirinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/5*4),
+                     visinaNalepke*m_nalepkaCentimeter-(m_nalepkaCentimeter/5*4));
 
-    painter.setFont(QFont("Tahoma",9));
+    painterText.setFont(QFont("Tahoma",9));
     switch(ui->comboBox_seznamNalepk->currentIndex())
     {
         case 0: {const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter));
-                drawText(painter, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");}
+                drawText(painterText, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");}
                 break;
         case 1: {const QPointF ptHeader1(qreal((sirinaNalepke*m_nalepkaCentimeter)/2 - (m_nalepkaCentimeter)),qreal(m_nalepkaCentimeter/2));
-                drawText(painter, ptHeader1, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");}
+                drawText(painterText, ptHeader1, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");}
                 break;
         default:{const QPointF ptHeaderDefault(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter));
-                drawText(painter, ptHeaderDefault, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");}
+                drawText(painterText, ptHeaderDefault, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");}
                 break;
     }
 
-    painter.setFont(QFont("Tahoma",35));
+    painterText.setFont(QFont("Tahoma",35));
     switch(ui->comboBox_seznamNalepk->currentIndex())
     {
         case 0: {const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
-                ui->lineEdit_napis->text() != "" ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
+                ui->lineEdit_napis->text() != "" ? drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
                 break;
         case 1: {const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2 - (m_nalepkaCentimeter*2)),qreal(m_nalepkaCentimeter*2));
-                ui->lineEdit_napis->text() != "" ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
+                ui->lineEdit_napis->text() != "" ? drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
                 break;
         default:{const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
-                ui->lineEdit_napis->text() != "" ? drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painter, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
+                ui->lineEdit_napis->text() != "" ? drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
                 break;
     }
-
     printer->setPageSize(QPrinter::A7);
     printer->setOrientation(QPrinter::Landscape);
     printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
     printer->setFullPage(true);
     printer->setOutputFormat(QPrinter::NativeFormat);
     QPrintDialog printDialog(printer, this);
+    painterText.end();
     if (printDialog.exec() == QDialog::Accepted)
         nalepka.print(printer);
 
-    painter.end();
     ui->lineEdit_napis->clear();
     ui->textEdit_qrNapis->clear();
     ui->label_qrcode->clear();
