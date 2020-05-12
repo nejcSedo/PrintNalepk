@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.4.5"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeter(75), m_qrVelikost(m_nalepkaCentimeter*1.33)
+    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.4.5"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeter(83), m_qrVelikost(m_nalepkaCentimeter*1.33)
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
@@ -144,6 +144,11 @@ void MainWindow::Nalepka()
     short sirinaNalepke(dimenzijeNalepke.at(0).toInt());
     short visinaNalepke(dimenzijeNalepke.at(1).toInt());
     QPrinter *printer = new QPrinter(QPrinter::HighResolution);
+    printer->setPageSize(QPrinter::A7);
+    printer->setOrientation(QPrinter::Landscape);
+    printer->setPageMargins(-59,-24,0,0,QPrinter::Millimeter);
+    printer->setFullPage(true);
+    printer->setOutputFormat(QPrinter::NativeFormat);
     QTextDocument nalepka;
     QSizeF paperSize;
     paperSize.setWidth(printer->width());
@@ -151,11 +156,9 @@ void MainWindow::Nalepka()
     nalepka.setPageSize(paperSize);
 
     QChar newLine('\u000A');
-    QString qrText("-- ELRA SETI d.o.o. --");
+    QString qrText("www.elraseti.si");
     qrText += newLine;
-    qrText += "www.elraseti.si";
-    qrText += newLine;
-    qrText += "info@elraseti.si";
+    qrText += id + " ; " + naziv;
     qrText += newLine;
     qrText += "Opombe:";
     qrText += newLine;
@@ -167,43 +170,39 @@ void MainWindow::Nalepka()
     painter.end();
 
     QPainter painterText(printer);
+
     painterText.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
-                           ((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*2.7)),
+                           ((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*3.2)),
                            m_nalepkaCentimeter*3.5,
                            m_nalepkaCentimeter*3.5, map);
 
-    painterText.drawRect(m_nalepkaCentimeter/6,
-                         m_nalepkaCentimeter/6,
-                         sirinaNalepke*m_nalepkaCentimeter,
-                         visinaNalepke*m_nalepkaCentimeter);
+    painterText.drawRect(m_nalepkaCentimeter/3,
+                         m_nalepkaCentimeter,
+                         m_nalepkaCentimeter*sirinaNalepke - (m_nalepkaCentimeter/3),
+                         m_nalepkaCentimeter*visinaNalepke - (m_nalepkaCentimeter*2));
 
     painterText.setFont(QFont("Tahoma",9));
-    const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter/2));
+    const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter/1.9));
     drawText(painterText, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra   Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
 
-    painter.setFont(QFont("Tahoma",16));
-    const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*1.2));
+    painter.setFont(QFont("Tahoma",17));
+    const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*1.3));
     drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, "LIST IZDELKA");
 
     painterText.setFont(QFont("Tahoma",11));
-    const QPointF pt1(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2));
+    const QPointF pt1(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*1.8));
     drawText(painterText, pt1, Qt::AlignVCenter | Qt::AlignHCenter, "Datum izdelave: " + QDate::currentDate().toString("d. M. yyyy"));
 
-    const QPointF pt2(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2.5));
+    const QPointF pt2(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2.3));
     drawText(painterText, pt2, Qt::AlignVCenter | Qt::AlignHCenter, "ID izdelka: " + id);
 
-    const QPointF pt3(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3));
+    const QPointF pt3(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2.7));
     drawText(painterText, pt3, Qt::AlignVCenter | Qt::AlignHCenter, "Naziv izdelka: " + naziv);
 
-    const QPointF pt4(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3.5));
+    const QPointF pt4(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3.2));
     drawText(painterText, pt4, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina);
 
     QPrintDialog printDialog(printer, this);
-    printer->setPageSize(QPrinter::A7);
-    printer->setOrientation(QPrinter::Landscape);
-    printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
-    printer->setFullPage(true);
-    printer->setOutputFormat(QPrinter::NativeFormat);
     painterText.end();
     if(printDialog.exec() == QDialog::Accepted)
         nalepka.print(printer);
