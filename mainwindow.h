@@ -20,6 +20,7 @@ public:
     void Search(QString, QString);
     void drawText(QPainter &, qreal, qreal, Qt::Alignment, const QString &, QRectF *);
     void drawText(QPainter &, const QPointF &, Qt::Alignment, const QString &, QRectF *);
+    void drawQr(QPixmap &, QString &, QString &, bool);
     void Nalepka();
     void keyReleaseEvent(QKeyEvent*);
     void ProduktCheck(QString, QString);
@@ -39,7 +40,6 @@ private slots:
     void on_actionPrint_triggered();
     void on_actionO_programu_triggered();
     void on_actionNov_napis_triggered();
-
     void on_textEdit_opombe_textChanged();
 
 private:
@@ -50,7 +50,9 @@ private:
     QString m_naziv;
     QString m_verzija;
     QLabel *m_verzijaLabel;
-    int m_nalepkaCentimeter;
-    int m_qrVelikost;
+    int m_nalepkaCentimeterPrint;
+    int m_nalepkaCentimeterPdf;
+    int m_qrVelikostPrint;
+    int m_qrVelikostPdf;
 };
 #endif // MAINWINDOW_H

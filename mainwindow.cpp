@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QPdfWriter>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.4.5"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeter(83), m_qrVelikost(m_nalepkaCentimeter*1.33)
+    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.4.5"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeterPrint(83), m_nalepkaCentimeterPdf(m_nalepkaCentimeterPrint * 5.8), m_qrVelikostPrint(m_nalepkaCentimeterPrint), m_qrVelikostPdf(m_nalepkaCentimeterPdf)
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
@@ -134,79 +135,122 @@ void MainWindow::drawText(QPainter & painter, const QPointF & point, Qt::Alignme
    drawText(painter, point.x(), point.y(), flags, text, boundingRect);
 }
 
+void MainWindow::drawQr(QPixmap &map, QString &id, QString &naziv, bool print)
+{
+    QChar newLine('\u000A');
+    QString qrText("www.elraseti.si");
+    qrText += newLine;
+    qrText += id + " ; " + naziv + " ; " + QDate::currentDate().toString("d.M.yyyy");
+    qrText += newLine;
+    qrText += "Opombe: ";
+
+    QPainter painterQr(&map);
+    if(print)
+    {
+        paintQR(painterQr,QSize(m_qrVelikostPrint,m_qrVelikostPrint), qrText + ui->textEdit_opombe->toPlainText(), QColor("black"));
+        map.save("qrNalepkePrint.png");
+    }
+    else
+    {
+        paintQR(painterQr,QSize(m_qrVelikostPdf/6,m_qrVelikostPdf/6), qrText + ui->textEdit_opombe->toPlainText(), QColor("black"));
+        map.save("qrNalepkePdf.png");
+    }
+    painterQr.end();
+}
+
 void MainWindow::Nalepka()
 {
     QString id(ui->lineEdit_IDprodukta->text().toUpper());
     QString naziv(ui->lineEdit_nazivProdukta->text().toUpper());
-    QString kolicina("");
+    QString kolicina;
     ui->lineEdit_kolicina->text() == "" ? kolicina = "-" : kolicina = ui->lineEdit_kolicina->text().toUpper();
+
     QStringList dimenzijeNalepke(ui->comboBox_seznamNalepk->itemText(0).split('x', Qt::SkipEmptyParts));
-    short sirinaNalepke(dimenzijeNalepke.at(0).toInt());
-    short visinaNalepke(dimenzijeNalepke.at(1).toInt());
+    short sirinaNalepkePrint(dimenzijeNalepke.at(0).toInt()*m_nalepkaCentimeterPrint);
+    short visinaNalepkePrint(dimenzijeNalepke.at(1).toInt()*m_nalepkaCentimeterPrint);
+    short sirinaNalepkePdf(dimenzijeNalepke.at(0).toInt()*m_nalepkaCentimeterPdf);
+    short visinaNalepkePdf(dimenzijeNalepke.at(1).toInt()*m_nalepkaCentimeterPdf);
+
     QPrinter *printer = new QPrinter(QPrinter::HighResolution);
     printer->setPageSize(QPrinter::A7);
     printer->setOrientation(QPrinter::Landscape);
     printer->setPageMargins(-59,-24,0,0,QPrinter::Millimeter);
     printer->setFullPage(true);
-    printer->setOutputFormat(QPrinter::NativeFormat);
-    QTextDocument nalepka;
-    QSizeF paperSize;
-    paperSize.setWidth(printer->width());
-    paperSize.setHeight(printer->height()/2);
-    nalepka.setPageSize(paperSize);
+    //printer->setOutputFormat(QPrinter::NativeFormat);
+    printer->setOutputFormat(QPrinter::PdfFormat);
 
-    QChar newLine('\u000A');
-    QString qrText("www.elraseti.si");
-    qrText += newLine;
-    qrText += id + " ; " + naziv;
-    qrText += newLine;
-    qrText += "Opombe:";
-    qrText += newLine;
+    QString nalepkaName(id + "-" + QDate::currentDate().toString("d_M_yyyy") + ".pdf");
+    const QString nalepkaFile("./nalepke/" + nalepkaName);
+    const QPageSize pageSize(QPageSize::A7);
+    const QPageLayout pageLayout(pageSize, QPageLayout::Landscape,QMargins(0,0,0,0));
 
-    QPixmap map(m_qrVelikost,m_qrVelikost);
-    QPainter painter(&map);
-    paintQR(painter,QSize(m_qrVelikost,m_qrVelikost), qrText + ui->textEdit_opombe->toPlainText(), QColor("black"));
-    map.save("image.png");
-    painter.end();
+    QTextDocument nalepkaPrint;
+    QPdfWriter nalepka(nalepkaFile);
+    nalepka.setPageSize(pageSize);
+    nalepka.setPageLayout(pageLayout);
 
-    QPainter painterText(printer);
+    QPainter *painterTextNalepkePrint = new QPainter(printer);
+    QPainter *painterTextNalepkePdf = new QPainter(&nalepka);
 
-    painterText.drawPixmap(((sirinaNalepke*m_nalepkaCentimeter)/2)-(m_qrVelikost*1.25),
-                           ((visinaNalepke*m_nalepkaCentimeter))-(m_qrVelikost+(m_nalepkaCentimeter*3.2)),
-                           m_nalepkaCentimeter*3.5,
-                           m_nalepkaCentimeter*3.5, map);
+    QPixmap map(m_qrVelikostPrint,m_qrVelikostPrint);
+    drawQr(map, id, naziv, false);
+    painterTextNalepkePdf->drawPixmap((sirinaNalepkePdf / 2) - (m_qrVelikostPdf * 1.6),
+                                       visinaNalepkePdf - (m_qrVelikostPdf * 4.65),
+                                       m_nalepkaCentimeterPdf * 3.5,
+                                       m_nalepkaCentimeterPdf * 3.5, map);
 
-    painterText.drawRect(m_nalepkaCentimeter/3,
-                         m_nalepkaCentimeter,
-                         m_nalepkaCentimeter*sirinaNalepke - (m_nalepkaCentimeter/3),
-                         m_nalepkaCentimeter*visinaNalepke - (m_nalepkaCentimeter*2));
+    drawQr(map, id, naziv, true);
+    painterTextNalepkePrint->drawPixmap((sirinaNalepkePrint / 2) - (m_qrVelikostPrint * 1.6),
+                                         visinaNalepkePrint - (m_qrVelikostPrint * 4.65),
+                                         m_nalepkaCentimeterPrint * 3.5,
+                                         m_nalepkaCentimeterPrint * 3.5, map);
 
-    painterText.setFont(QFont("Tahoma",9));
-    const QPointF ptHeader(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter/1.9));
-    drawText(painterText, ptHeader, Qt::AlignVCenter | Qt::AlignHCenter, "Elra   Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
+    painterTextNalepkePdf->drawRect(m_nalepkaCentimeterPdf / 3,
+                                    m_nalepkaCentimeterPdf - (m_nalepkaCentimeterPdf / 7),
+                                    sirinaNalepkePdf - (m_nalepkaCentimeterPdf / 3),
+                                    visinaNalepkePdf - (m_nalepkaCentimeterPdf * 2));
+    painterTextNalepkePrint->drawRect(m_nalepkaCentimeterPrint / 3,
+                                      m_nalepkaCentimeterPrint - (m_nalepkaCentimeterPrint / 7),
+                                      sirinaNalepkePrint - (m_nalepkaCentimeterPrint / 3),
+                                      visinaNalepkePrint - (m_nalepkaCentimeterPrint * 2));
 
-    painter.setFont(QFont("Tahoma",17));
-    const QPointF pt(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*1.3));
-    drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, "LIST IZDELKA");
+    painterTextNalepkePdf->setFont(QFont("Tahoma",9));
+    const QPointF headerPositionPdf(qreal(sirinaNalepkePdf/2), qreal(m_nalepkaCentimeterPdf/1.9));
+    drawText(*painterTextNalepkePdf, headerPositionPdf, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
+    const QPointF headerPositionPrint(qreal(sirinaNalepkePrint/2), qreal(m_nalepkaCentimeterPrint/1.9));
+    painterTextNalepkePrint->setFont(QFont("Tahoma",9));
+    drawText(*painterTextNalepkePrint, headerPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
 
-    painterText.setFont(QFont("Tahoma",11));
-    const QPointF pt1(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*1.8));
-    drawText(painterText, pt1, Qt::AlignVCenter | Qt::AlignHCenter, "Datum izdelave: " + QDate::currentDate().toString("d. M. yyyy"));
+    painterTextNalepkePdf->setFont(QFont("Tahoma",20));
+    const QPointF listPositionPdf(qreal(sirinaNalepkePdf/2), qreal(m_nalepkaCentimeterPdf*1.2));
+    drawText(*painterTextNalepkePdf, listPositionPdf, Qt::AlignVCenter | Qt::AlignHCenter, "LIST IZDELKA");
+    const QPointF listPositionPrint(qreal(sirinaNalepkePrint/2), qreal(m_nalepkaCentimeterPrint*1.2));
+    painterTextNalepkePrint->setFont(QFont("Tahoma",20));
+    drawText(*painterTextNalepkePrint, listPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "LIST IZDELKA");
 
-    const QPointF pt2(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2.3));
-    drawText(painterText, pt2, Qt::AlignVCenter | Qt::AlignHCenter, "ID izdelka: " + id);
+    painterTextNalepkePdf->setFont(QFont("Tahoma",11));
+    const QPointF idPositionPdf(qreal(sirinaNalepkePdf/2), qreal(m_nalepkaCentimeterPdf*2.1));
+    drawText(*painterTextNalepkePdf, idPositionPdf, Qt::AlignVCenter | Qt::AlignHCenter, "ID izdelka: " + id);
+    painterTextNalepkePrint->setFont(QFont("Tahoma",11));
+    const QPointF idPositionPrint(qreal(sirinaNalepkePrint/2), qreal(m_nalepkaCentimeterPrint*2.1));
+    drawText(*painterTextNalepkePrint, idPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "ID izdelka: " + id);
 
-    const QPointF pt3(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*2.7));
-    drawText(painterText, pt3, Qt::AlignVCenter | Qt::AlignHCenter, "Naziv izdelka: " + naziv);
+    const QPointF nazivPositionPdf(qreal(sirinaNalepkePdf/2), qreal(m_nalepkaCentimeterPdf*2.6));
+    drawText(*painterTextNalepkePdf, nazivPositionPdf, Qt::AlignVCenter | Qt::AlignHCenter, "Naziv izdelka: " + naziv);
+    const QPointF nazivPositionPrint(qreal(sirinaNalepkePrint/2), qreal(m_nalepkaCentimeterPrint*2.6));
+    drawText(*painterTextNalepkePrint, nazivPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "Naziv izdelka: " + naziv);
 
-    const QPointF pt4(qreal((sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter*3.2));
-    drawText(painterText, pt4, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina);
+    const QPointF kolicinaPositionPdf(qreal(sirinaNalepkePdf/2), qreal(m_nalepkaCentimeterPdf*3.1));
+    drawText(*painterTextNalepkePdf, kolicinaPositionPdf, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina);
+    const QPointF kolicinaPositionPrint(qreal(sirinaNalepkePrint/2),qreal(m_nalepkaCentimeterPrint*3.1));
+    drawText(*painterTextNalepkePrint, kolicinaPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina);
+
+    painterTextNalepkePdf->end();
+    painterTextNalepkePrint->end();
 
     QPrintDialog printDialog(printer, this);
-    painterText.end();
     if(printDialog.exec() == QDialog::Accepted)
-        nalepka.print(printer);
-
+        nalepkaPrint.print(printer);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)

@@ -1,9 +1,13 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
+    QDir dir("./nalepke");
+    if (!dir.exists())
+        dir.mkpath(".");
     if(!QFileInfo::exists("./nalepke.txt"))
     {
         QFile file("./nalepke.txt");
