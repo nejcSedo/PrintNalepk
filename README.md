@@ -17,4 +17,8 @@ Sprememba nalepke iz html v TextDocument, spremenjen slog
 Spremembe v kodi, dodano opozorilo za predolgo besedilo v opombah in napisu za Qr kodo.
 Optimizacija kode.
 
+# v1.5
+Dodano shranjevanje nalepke v mapo "./nalepke/id_datum.pdf"
+Optimirana koda za print
+
 # Nejc Sedovnik, April 2020

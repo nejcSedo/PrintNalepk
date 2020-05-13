@@ -80,6 +80,12 @@ void novaNalepka::drawText(QPainter & painter, const QPointF & point, Qt::Alignm
 void novaNalepka::on_pushButton_natisni_clicked()
 {
     QPrinter *printer = new QPrinter(QPrinter::HighResolution);
+    printer->setPageSize(QPrinter::A7);
+    printer->setOrientation(QPrinter::Landscape);
+    printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
+    printer->setFullPage(true);
+    printer->setOutputFormat(QPrinter::NativeFormat);
+
     QStringList dimenzijeNalepke(ui->comboBox_seznamNalepk->itemText(0).split('x', Qt::SkipEmptyParts));
     short sirinaNalepke(dimenzijeNalepke.at(0).toInt());
     short visinaNalepke(dimenzijeNalepke.at(1).toInt());
@@ -87,6 +93,7 @@ void novaNalepka::on_pushButton_natisni_clicked()
     QTextDocument nalepka;
     QPixmap map(m_qrVelikost,m_qrVelikost);
     QPainter painter(&map);
+
     QString napis("");
     ui->lineEdit_napis->text() = "" ? napis = "NI PODATKA" : napis = ui->lineEdit_napis->text();
     ui->textEdit_qrNapis->toPlainText() == "" ? paintQR(painter, QSize(m_qrVelikost, m_qrVelikost), napis, QColor("black")) :
@@ -139,15 +146,8 @@ void novaNalepka::on_pushButton_natisni_clicked()
                 ui->lineEdit_napis->text() != "" ? drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, ui->lineEdit_napis->text().toUpper()) : drawText(painterText, pt, Qt::AlignVCenter | Qt::AlignHCenter, "QR KODA");}
                 break;
     }
-    printer->setPageSize(QPrinter::A7);
-    printer->setOrientation(QPrinter::Landscape);
-    printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
-    printer->setFullPage(true);
-    printer->setOutputFormat(QPrinter::NativeFormat);
-    QPrintDialog printDialog(printer, this);
+
     painterText.end();
-    if (printDialog.exec() == QDialog::Accepted)
-        nalepka.print(printer);
 
     ui->lineEdit_napis->clear();
     ui->textEdit_qrNapis->clear();

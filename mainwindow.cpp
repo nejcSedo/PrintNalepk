@@ -4,7 +4,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.4.5"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeterPrint(83), m_nalepkaCentimeterPdf(m_nalepkaCentimeterPrint * 5.8), m_qrVelikostPrint(m_nalepkaCentimeterPrint), m_qrVelikostPdf(m_nalepkaCentimeterPdf)
+    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.5"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeterPrint(83), m_nalepkaCentimeterPdf(m_nalepkaCentimeterPrint * 5.8), m_qrVelikostPrint(m_nalepkaCentimeterPrint), m_qrVelikostPdf(m_nalepkaCentimeterPdf)
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
@@ -176,8 +176,8 @@ void MainWindow::Nalepka()
     printer->setOrientation(QPrinter::Landscape);
     printer->setPageMargins(-59,-24,0,0,QPrinter::Millimeter);
     printer->setFullPage(true);
-    //printer->setOutputFormat(QPrinter::NativeFormat);
-    printer->setOutputFormat(QPrinter::PdfFormat);
+    printer->setOutputFormat(QPrinter::NativeFormat);
+    //printer->setOutputFormat(QPrinter::PdfFormat);
 
     QString nalepkaName(id + "-" + QDate::currentDate().toString("d_M_yyyy") + ".pdf");
     const QString nalepkaFile("./nalepke/" + nalepkaName);
@@ -185,12 +185,12 @@ void MainWindow::Nalepka()
     const QPageLayout pageLayout(pageSize, QPageLayout::Landscape,QMargins(0,0,0,0));
 
     QTextDocument nalepkaPrint;
-    QPdfWriter nalepka(nalepkaFile);
-    nalepka.setPageSize(pageSize);
-    nalepka.setPageLayout(pageLayout);
+    QPdfWriter nalepkaPdf(nalepkaFile);
+    nalepkaPdf.setPageSize(pageSize);
+    nalepkaPdf.setPageLayout(pageLayout);
 
     QPainter *painterTextNalepkePrint = new QPainter(printer);
-    QPainter *painterTextNalepkePdf = new QPainter(&nalepka);
+    QPainter *painterTextNalepkePdf = new QPainter(&nalepkaPdf);
 
     QPixmap map(m_qrVelikostPrint,m_qrVelikostPrint);
     drawQr(map, id, naziv, false);
@@ -247,10 +247,6 @@ void MainWindow::Nalepka()
 
     painterTextNalepkePdf->end();
     painterTextNalepkePrint->end();
-
-    QPrintDialog printDialog(printer, this);
-    if(printDialog.exec() == QDialog::Accepted)
-        nalepkaPrint.print(printer);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)
