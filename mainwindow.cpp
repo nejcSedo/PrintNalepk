@@ -27,9 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     m_verzijaLabel->setText(m_verzija);
     ui->statusbar->addPermanentWidget(m_verzijaLabel);
     ui->comboBox_seznamNalepk->addItem("10x8");
-    ui->comboBox_seznamNalepk->addItem("10x4");
-    ui->comboBox_seznamNalepk->setDisabled(true);
-
     ui->lineEdit_IDprodukta->setFocus();
 }
 
@@ -207,11 +204,11 @@ void MainWindow::Nalepka()
 
     painterTextNalepkePdf->drawRect(m_nalepkaCentimeterPdf / 3,
                                     m_nalepkaCentimeterPdf - (m_nalepkaCentimeterPdf / 7),
-                                    sirinaNalepkePdf - (m_nalepkaCentimeterPdf / 3),
+                                    sirinaNalepkePdf - (m_nalepkaCentimeterPdf/2),
                                     visinaNalepkePdf - (m_nalepkaCentimeterPdf * 2));
     painterTextNalepkePrint->drawRect(m_nalepkaCentimeterPrint / 3,
                                       m_nalepkaCentimeterPrint - (m_nalepkaCentimeterPrint / 7),
-                                      sirinaNalepkePrint - (m_nalepkaCentimeterPrint / 3),
+                                      sirinaNalepkePrint - (m_nalepkaCentimeterPrint/2),
                                       visinaNalepkePrint - (m_nalepkaCentimeterPrint * 2));
 
     painterTextNalepkePdf->setFont(QFont("Tahoma",9));
