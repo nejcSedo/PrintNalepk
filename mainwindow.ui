@@ -250,6 +250,16 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QSpinBox" name="spinBox_kopijePrint">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -425,7 +435,7 @@
   </action>
   <action name="actionNov_napis">
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/elraseti.png</normaloff>:/icons/elraseti.png</iconset>
    </property>
    <property name="text">

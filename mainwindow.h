@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "novanalepka.h"
+#include "methods.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -44,6 +45,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    Methods* m_methods;
     bool m_count;
     bool m_isClicked;
     QString m_id;

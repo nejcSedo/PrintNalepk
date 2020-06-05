@@ -4,7 +4,10 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), m_count(true), m_isClicked(false), m_id(""), m_naziv(""), m_verzija("v1.5"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeterPrint(83), m_nalepkaCentimeterPdf(m_nalepkaCentimeterPrint * 5.8), m_qrVelikostPrint(m_nalepkaCentimeterPrint), m_qrVelikostPdf(m_nalepkaCentimeterPdf)
+    , ui(new Ui::MainWindow), m_methods(new Methods()), m_count(true), m_isClicked(false), m_id(""), m_naziv(""),
+      m_verzija("v1.5"), m_verzijaLabel(new QLabel(this)), m_nalepkaCentimeterPrint(83),
+      m_nalepkaCentimeterPdf(m_nalepkaCentimeterPrint * 5.8), m_qrVelikostPrint(m_nalepkaCentimeterPrint),
+      m_qrVelikostPdf(m_nalepkaCentimeterPdf)
 {
     ui->setupUi(this);
     QIcon icon(":icons/icon.ico");
@@ -27,11 +30,13 @@ MainWindow::MainWindow(QWidget *parent)
     m_verzijaLabel->setText(m_verzija);
     ui->statusbar->addPermanentWidget(m_verzijaLabel);
     ui->comboBox_seznamNalepk->addItem("10x8");
+    ui->spinBox_kopijePrint->setValue(1);
     ui->lineEdit_IDprodukta->setFocus();
 }
 
 MainWindow::~MainWindow()
 {
+    delete methods;
     delete ui;
 }
 
@@ -110,28 +115,6 @@ void MainWindow::Search(QString id, QString naziv)
     fileName.close();
 }
 
-void MainWindow::drawText(QPainter & painter, qreal x, qreal y, Qt::Alignment flags, const QString & text, QRectF * boundingRect = 0)
-{
-   const qreal size = 32767.0;
-   QPointF corner(x, y - size);
-   if (flags & Qt::AlignHCenter)
-       corner.rx() -= size/2.0;
-   else if (flags & Qt::AlignRight)
-       corner.rx() -= size;
-   if (flags & Qt::AlignVCenter)
-       corner.ry() += size/2.0;
-   else if (flags & Qt::AlignTop)
-       corner.ry() += size;
-   else flags |= Qt::AlignBottom;
-   QRectF rect{corner.x(), corner.y(), size, size};
-   painter.drawText(rect, flags, text, boundingRect);
-}
-
-void MainWindow::drawText(QPainter & painter, const QPointF & point, Qt::Alignment flags, const QString & text, QRectF * boundingRect = {})
-{
-   drawText(painter, point.x(), point.y(), flags, text, boundingRect);
-}
-
 void MainWindow::drawQr(QPixmap &map, QString &id, QString &naziv, bool print)
 {
     QChar newLine('\u000A');
@@ -175,6 +158,7 @@ void MainWindow::Nalepka()
     printer->setFullPage(true);
     printer->setOutputFormat(QPrinter::NativeFormat);
     //printer->setOutputFormat(QPrinter::PdfFormat);
+    printer->setNumCopies(ui->spinBox_kopijePrint->value());
 
     QString nalepkaName(id + "-" + QDate::currentDate().toString("d_M_yyyy") + ".pdf");
     const QString nalepkaFile("./nalepke/" + nalepkaName);
@@ -213,10 +197,10 @@ void MainWindow::Nalepka()
 
     painterTextNalepkePdf->setFont(QFont("Tahoma",9));
     const QPointF headerPositionPdf(qreal(sirinaNalepkePdf/2), qreal(m_nalepkaCentimeterPdf/1.9));
-    drawText(*painterTextNalepkePdf, headerPositionPdf, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
+    m_methods->drawText(*painterTextNalepkePdf, headerPositionPdf, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
     const QPointF headerPositionPrint(qreal(sirinaNalepkePrint/2), qreal(m_nalepkaCentimeterPrint/1.9));
     painterTextNalepkePrint->setFont(QFont("Tahoma",9));
-    drawText(*painterTextNalepkePrint, headerPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
+    m_methods->drawText(*painterTextNalepkePrint, headerPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
 
     painterTextNalepkePdf->setFont(QFont("Tahoma",20));
     const QPointF listPositionPdf(qreal(sirinaNalepkePdf/2), qreal(m_nalepkaCentimeterPdf*1.2));
@@ -244,6 +228,7 @@ void MainWindow::Nalepka()
 
     painterTextNalepkePdf->end();
     painterTextNalepkePrint->end();
+    ui->spinBox_kopijePrint->setValue(1);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)

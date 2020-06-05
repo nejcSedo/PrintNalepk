@@ -9,10 +9,10 @@ novaNalepka::novaNalepka(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Qr koda");
     ui->pushButton_natisni->setDisabled(true);
-    ui->comboBox_seznamNalepk->addItem("11x8");
-    ui->comboBox_seznamNalepk->addItem("10x4");
+    ui->comboBox_seznamNalepk->addItem("10x8");
     ui->comboBox_seznamNalepk->setDisabled(true);
     ui->lineEdit_napis->setMaxLength(14);
+    ui->spinBox_kopijePrint->setValue(1);
     ui->lineEdit_napis->setFocus();
 }
 
@@ -85,6 +85,7 @@ void novaNalepka::on_pushButton_natisni_clicked()
     printer->setPageMargins (1,1,1,1,QPrinter::Millimeter);
     printer->setFullPage(true);
     printer->setOutputFormat(QPrinter::NativeFormat);
+    printer->setNumCopies(ui->spinBox_kopijePrint->value());
 
     QStringList dimenzijeNalepke(ui->comboBox_seznamNalepk->itemText(0).split('x', Qt::SkipEmptyParts));
     short sirinaNalepke(dimenzijeNalepke.at(0).toInt());
@@ -149,6 +150,7 @@ void novaNalepka::on_pushButton_natisni_clicked()
 
     painterText.end();
 
+    ui->spinBox_kopijePrint->setValue(1);
     ui->lineEdit_napis->clear();
     ui->textEdit_qrNapis->clear();
     ui->label_qrcode->clear();
