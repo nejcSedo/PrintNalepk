@@ -21,11 +21,13 @@ SOURCES += \
     QrCode.cpp \
     main.cpp \
     mainwindow.cpp \
+    methods.cpp \
     novanalepka.cpp
 
 HEADERS += \
     QrCode.hpp \
     mainwindow.h \
+    methods.h \
     novanalepka.h
 
 FORMS += \

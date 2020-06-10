@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>456</height>
+    <height>487</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,44 +15,12 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_seznamNalepk">
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::WinPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <property name="text">
-        <string>Seznam nalepk:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBox_seznamNalepk"/>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QLabel" name="label_napis">
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>130</width>
          <height>0</height>
         </size>
        </property>
@@ -81,13 +49,13 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_qrNapis">
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>130</width>
          <height>0</height>
         </size>
        </property>
@@ -110,7 +78,7 @@
         <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
-        <string>Qr koda:</string>
+        <string>Qr koda napis:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -129,43 +97,42 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_qrcode">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>300</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <underline>false</underline>
-      </font>
-     </property>
-     <property name="autoFillBackground">
-      <bool>true</bool>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::WinPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::WinPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <property name="text">
+        <string>Shrani nalepko kot:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_shrani"/>
+     </item>
+    </layout>
    </item>
-   <item row="4" column="0">
+   <item row="3" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="pushButton_close">
@@ -184,12 +151,26 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_kopijePrint">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <tabstops>
+  <tabstop>lineEdit_napis</tabstop>
+  <tabstop>textEdit_qrNapis</tabstop>
+  <tabstop>lineEdit_shrani</tabstop>
   <tabstop>pushButton_natisni</tabstop>
+  <tabstop>spinBox_kopijePrint</tabstop>
   <tabstop>pushButton_close</tabstop>
  </tabstops>
  <resources/>
@@ -201,8 +182,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>251</y>
+     <x>89</x>
+     <y>475</y>
     </hint>
     <hint type="destinationlabel">
      <x>106</x>

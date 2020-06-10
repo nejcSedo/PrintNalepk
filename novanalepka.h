@@ -1,43 +1,41 @@
-#ifndef NOVANALEPKA_H
-#define NOVANALEPKA_H
+#ifndef novaNalepka_H
+#define novaNalepka_H
 
-#include <QPainter>
-#include <QtPrintSupport/QPrinter>
-#include <QtPrintSupport/QPrintDialog>
-#include <QDir>
-#include <QMessageBox>
-#include <QTextStream>
-#include <QTreeWidgetItem>
-#include <QDate>
-#include <QKeyEvent>
-#include <QLabel>
-#include "QrCode.hpp"
+#include "methods.h"
 
-namespace Ui {
-class novaNalepka;
-}
+QT_BEGIN_NAMESPACE
+namespace Ui { class novaNalepka; }
+QT_END_NAMESPACE
 
 class novaNalepka : public QDialog
 {
     Q_OBJECT
 
+// PUBLIC METHODS
 public:
     explicit novaNalepka(QWidget *parent = nullptr);
     ~novaNalepka();
-    void paintQR(QPainter &, const QSize, const QString &, QColor);
-    void drawText(QPainter &, qreal, qreal, Qt::Alignment, const QString &, QRectF *);
-    void drawText(QPainter &, const QPointF &, Qt::Alignment, const QString &, QRectF *);
+    void Reset();
+    void keyReleaseEvent(QKeyEvent*);
 
+// SLOTS
 private slots:
     void on_pushButton_natisni_clicked();
     void on_textEdit_qrNapis_textChanged();
+    void on_lineEdit_napis_textChanged(const QString& arg1);
 
-    void on_lineEdit_napis_textChanged(const QString &arg1);
-
+// PRIVATE VARS
 private:
     Ui::novaNalepka *ui;
-    int m_nalepkaCentimeter;
-    int m_qrVelikost;
+    Methods* m_methods;
+    QPixmap m_map;
+    QPixmap m_mapSaved;
+    QString m_Qrtext;
+    QString m_id;
+    QString m_napis;
+    QString m_QrKodaAliNapis;
+    int m_numOfCopies;
+    Methods::NacinTiska m_nacinTiska;
 };
 
-#endif // NOVANALEPKA_H
+#endif // novaNalepka_H
