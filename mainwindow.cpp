@@ -131,7 +131,7 @@ void MainWindow::Search(const QString& id, const QString& naziv)
 
 // UJAME PRITISK NA TIPKO
 void MainWindow::keyReleaseEvent(QKeyEvent* event) {
-    if(event->key() == Qt::Key_Insert || event->key() == Qt::Key_Return) {
+    if(event->key() == Qt::Key_Insert) {
         m_executable = false;
         if(ui->treeWidget->topLevelItem(0) == nullptr) {
             Reset();
@@ -139,12 +139,16 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event) {
         else if(m_treeItemCount != 0) {
             ui->lineEdit_IDprodukta->setText(ui->treeWidget->selectedItems().at(0)->text(0));
             ui->lineEdit_nazivProdukta->setText(ui->treeWidget->selectedItems().at(0)->text(1));
+            ui->pushButton_natisni->setDisabled(false);
+            ui->actionPrint->setDisabled(false);
             ui->lineEdit_kolicina->setFocus();
             m_treeItemCount = 0;
         }
         else {
             ui->lineEdit_IDprodukta->setText(ui->treeWidget->topLevelItem(0)->text(0));
             ui->lineEdit_nazivProdukta->setText(ui->treeWidget->topLevelItem(0)->text(1));
+            ui->pushButton_natisni->setDisabled(false);
+            ui->actionPrint->setDisabled(false);
             ui->lineEdit_kolicina->setFocus();
             m_treeItemCount = 0;
         }

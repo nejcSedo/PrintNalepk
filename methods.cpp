@@ -1,8 +1,8 @@
 #include "methods.h"
 
 // KONSTRUKTOR
-Methods::Methods(QWidget *parent) : QMainWindow(parent), m_nalepkaText(""), m_nalepkaCentimeter(83),
-    m_qrVelikost(m_nalepkaCentimeter*5), m_sirinaNalepke(10), m_visinaNalepke(8) {
+Methods::Methods(QWidget *parent) : QMainWindow(parent), m_nalepkaText(""), m_nalepkaCentimeter(100),
+    m_qrVelikost(m_nalepkaCentimeter*5), m_sirinaNalepke(9), m_visinaNalepke(7) {
 
 }
 
@@ -133,24 +133,24 @@ void Methods::NalepkaPrint(QString id, QString naziv, QString kolicina, QString 
     // PDF
     painterTextNalepkePdf.drawRect(m_nalepkaCentimeter * 3,
                                     m_nalepkaCentimeter * 3,
-                                    m_sirinaNalepke*(m_nalepkaCentimeter * 5.6) - m_nalepkaCentimeter * 3,
-                                    m_visinaNalepke*(m_nalepkaCentimeter * 5) - m_nalepkaCentimeter * 3);
+                                    m_sirinaNalepke * (m_nalepkaCentimeter * 5.6) - m_nalepkaCentimeter * 3,
+                                    m_visinaNalepke * (m_nalepkaCentimeter * 5) - m_nalepkaCentimeter * 3);
 
-    painterTextNalepkePdf.drawPixmap(m_sirinaNalepke*m_nalepkaCentimeter * 2.35 - m_qrVelikost,
-                                       m_visinaNalepke*m_nalepkaCentimeter * 2.8 - m_qrVelikost,
+    painterTextNalepkePdf.drawPixmap(m_sirinaNalepke * m_nalepkaCentimeter * 2.35 - m_qrVelikost,
+                                       m_visinaNalepke * m_nalepkaCentimeter * 2.8 - m_qrVelikost,
                                        m_nalepkaCentimeter * 20,
                                        m_nalepkaCentimeter * 20, map);
 
     // PRINT
-    painterTextNalepkePrint.drawRect(m_nalepkaCentimeter / 3,
-                                     m_nalepkaCentimeter - (m_nalepkaCentimeter / 7),
-                                     m_sirinaNalepke - (m_nalepkaCentimeter / 2),
-                                     m_visinaNalepke - (m_nalepkaCentimeter * 2));
+    painterTextNalepkePrint.drawRect(m_nalepkaCentimeter/2,
+                                     m_nalepkaCentimeter/1.5,
+                                     (m_sirinaNalepke * m_nalepkaCentimeter) - (m_nalepkaCentimeter * 1.2),
+                                     (m_visinaNalepke * m_nalepkaCentimeter) - (m_nalepkaCentimeter * 1.9));
 
-    painterTextNalepkePrint.drawPixmap((m_sirinaNalepke / 2) - m_qrVelikost,
-                                        m_visinaNalepke - m_qrVelikost,
-                                        m_nalepkaCentimeter * 3.5,
-                                        m_nalepkaCentimeter * 3.5, map);
+    painterTextNalepkePrint.drawPixmap(m_sirinaNalepke * m_nalepkaCentimeter - (m_qrVelikost * 1.2),
+                                       m_visinaNalepke * m_nalepkaCentimeter - (m_qrVelikost / 1.15),
+                                       m_nalepkaCentimeter * 3,
+                                       m_nalepkaCentimeter * 3, map);
 
     // STANDARD NACIN (KO GRE ZA NALEPKO Z ID, NAZIVOM, KOLICINO IN OPOMBO
     if(nacin == NacinTiska::Standard)  {
@@ -174,22 +174,22 @@ void Methods::NalepkaPrint(QString id, QString naziv, QString kolicina, QString 
         drawText(painterTextNalepkePdf, kolicinaPositionPdf, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina, boundingRect);
 
         // PRINT
-        const QPointF headerPositionPrint(qreal(m_sirinaNalepke/2), qreal(m_nalepkaCentimeter/1.9));
+        const QPointF headerPositionPrint(qreal((m_sirinaNalepke*m_nalepkaCentimeter)/2), qreal(m_nalepkaCentimeter / 2.2));
         painterTextNalepkePrint.setFont(QFont("Tahoma",9));
         drawText(painterTextNalepkePrint, headerPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela", boundingRect);
 
-        const QPointF listPositionPrint(qreal(m_sirinaNalepke/2), qreal(m_nalepkaCentimeter*1.2));
+        const QPointF listPositionPrint(qreal((m_sirinaNalepke*m_nalepkaCentimeter)/2), qreal(m_nalepkaCentimeter * 1));
         painterTextNalepkePrint.setFont(QFont("Tahoma",20));
         drawText(painterTextNalepkePrint, listPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "LIST IZDELKA", boundingRect);
 
         painterTextNalepkePrint.setFont(QFont("Tahoma",11));
-        const QPointF idPositionPrint(qreal(m_sirinaNalepke/2), qreal(m_nalepkaCentimeter*2.1));
+        const QPointF idPositionPrint(qreal((m_sirinaNalepke*m_nalepkaCentimeter)/2), qreal(m_nalepkaCentimeter * 1.5));
         drawText(painterTextNalepkePrint, idPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "ID izdelka: " + id, boundingRect);
 
-        const QPointF nazivPositionPrint(qreal(m_sirinaNalepke/2), qreal(m_nalepkaCentimeter*2.6));
+        const QPointF nazivPositionPrint(qreal((m_sirinaNalepke*m_nalepkaCentimeter)/2), qreal(m_nalepkaCentimeter * 2));
         drawText(painterTextNalepkePrint, nazivPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "Naziv izdelka: " + naziv, boundingRect);
 
-        const QPointF kolicinaPositionPrint(qreal(m_sirinaNalepke/2),qreal(m_nalepkaCentimeter*3.1));
+        const QPointF kolicinaPositionPrint(qreal((m_sirinaNalepke*m_nalepkaCentimeter)/2),qreal(m_nalepkaCentimeter * 2.5));
         drawText(painterTextNalepkePrint, kolicinaPositionPrint, Qt::AlignVCenter | Qt::AlignHCenter, "Količina: " + kolicina, boundingRect);
     }
 

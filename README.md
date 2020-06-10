@@ -21,4 +21,7 @@ Optimizacija kode.
 Dodano shranjevanje nalepke v mapo "./nalepke/id_datum.pdf"
 Optimirana koda za print
 
+# v1.7
+Spremenjena koda, dodan class Methods, dodana možnost tiska število kopij, spremenjena QR koda (do 1000 znakov)
+
 # Nejc Sedovnik, April 2020
