@@ -17,10 +17,11 @@ novaNalepka::novaNalepka(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Qr koda");
     ui->pushButton_natisni->setDisabled(true);
-    ui->lineEdit_napis->setMaxLength(14);
+    ui->lineEdi_napis_prvaCrta->setMaxLength(14);
+    ui->lineEdit_napis_drugaCrta->setMaxLength(14);
     ui->spinBox_kopijePrint->setValue(1); 
     m_numOfCopies = ui->spinBox_kopijePrint->value();
-    ui->lineEdit_napis->setFocus();
+    ui->lineEdi_napis_prvaCrta->setFocus();
 }
 
 // DESTRUKTOR
@@ -33,10 +34,10 @@ novaNalepka::~novaNalepka()
 // OVERRIDE RESET
 void novaNalepka::Reset()
 {
-    ui->lineEdit_napis->setDisabled(false);
     ui->pushButton_natisni->setDisabled(true);
     ui->spinBox_kopijePrint->setValue(1);
-    ui->lineEdit_napis->clear();
+    ui->lineEdi_napis_prvaCrta->clear();
+    ui->lineEdit_napis_drugaCrta->clear();
     ui->textEdit_qrNapis->clear();
     ui->lineEdit_shrani->clear();
     ui->textEdit_qrNapis->setFocus();
@@ -46,10 +47,11 @@ void novaNalepka::keyReleaseEvent(QKeyEvent* event)
 {
     if(event->key() == Qt::Key_P && event->modifiers().testFlag(Qt::ControlModifier) && ui->pushButton_natisni->isEnabled()) {
         m_id = ui->lineEdit_shrani->text();
-        m_napis  = ui->lineEdit_napis->text();
+        m_napis  = ui->lineEdi_napis_prvaCrta->text() + ";" + ui->lineEdit_napis_drugaCrta->text();
         m_Qrtext = ui->textEdit_qrNapis->toPlainText();
         m_numOfCopies = ui->spinBox_kopijePrint->value();
-        m_methods->NalepkaPrint(m_id, m_napis,
+        m_methods->NalepkaPrint(m_id,
+                                m_napis,
                                 m_QrKodaAliNapis,
                                 m_Qrtext,
                                 m_numOfCopies,
@@ -62,10 +64,11 @@ void novaNalepka::keyReleaseEvent(QKeyEvent* event)
 void novaNalepka::on_pushButton_natisni_clicked()
 {
     m_id = ui->lineEdit_shrani->text();
-    m_napis  = ui->lineEdit_napis->text();
+    m_napis  = ui->lineEdi_napis_prvaCrta->text() + ";" + ui->lineEdit_napis_drugaCrta->text();
     m_Qrtext = ui->textEdit_qrNapis->toPlainText();
     m_numOfCopies = ui->spinBox_kopijePrint->value();
-    m_methods->NalepkaPrint(m_id, m_napis,
+    m_methods->NalepkaPrint(m_id,
+                            m_napis,
                             m_QrKodaAliNapis,
                             m_Qrtext,
                             m_numOfCopies,
