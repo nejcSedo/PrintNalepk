@@ -7,10 +7,16 @@ Methods::Methods(QWidget *parent) :
     QMainWindow(parent),
     m_nalepkaText(""),
     m_alignment(Qt::AlignVCenter | Qt::AlignHCenter),
-    m_nalepkaCentimeter(10),
+    m_nalepkaCentimeter(100),
     m_qrVelikost(m_nalepkaCentimeter*4),
-    m_sirinaNalepke(100),
-    m_visinaNalepke(70)
+    m_sirinaNalepke(900),
+    m_visinaNalepke(700),
+    m_ofSetHeader(m_nalepkaCentimeter / 3),
+    m_ofSetListIzdelka_FirstLine(m_nalepkaCentimeter * 0.8),
+    m_ofSetId_OneLine(m_nalepkaCentimeter * 1.4),
+    m_ofSetNaziv_SecondLine(m_nalepkaCentimeter * 1.9),
+    m_ofSetKolicina(m_nalepkaCentimeter * 2.4),
+    m_XofSet((m_sirinaNalepke - m_nalepkaCentimeter) / 2)
 {
 
 }
@@ -130,9 +136,8 @@ void Methods::NalepkaPrint(const QString& id, const QString& naziv,
     //printer.setPrinterName("Rollo Printer");
     printer.setPrinterName("Microsoft Print to PDF");
     printer.setPageSize(QPrinter::Custom);
-    printer.setPaperSize(QSizeF(10,7),QPrinter::Millimeter);
+    printer.setPaperSize(QSizeF(70,100),QPrinter::Millimeter);
     printer.setOrientation(QPrinter::Landscape);
-    printer.setPageMargins(0,0,0,0,QPrinter::Millimeter);
     printer.setFullPage(false);
     printer.setOutputFormat(QPrinter::NativeFormat);
     printer.setNumCopies(numCopies);
@@ -152,7 +157,9 @@ void Methods::NalepkaPrint(const QString& id, const QString& naziv,
     // SHRANJEVANJE V PDF
     m_nalepkaText = QDate::currentDate().toString("d_M_yyyy") + "-" + id + ".pdf";
     const QString nalepkaFile("./nalepke/" + m_nalepkaText);
-    const QPageSize pageSize(QPageSize::A7);
+    const QSizeF pageSizeMM(70,100);
+    const QPageSize pageSize(pageSizeMM, QPageSize::Millimeter);
+    //const QPageSize pageSize(QPageSize::A7);
     const QPageLayout pageLayout(pageSize, QPageLayout::Landscape,QMargins(0,0,0,0));
 
     QPdfWriter nalepkaPdf(nalepkaFile);
@@ -164,40 +171,26 @@ void Methods::NalepkaPrint(const QString& id, const QString& naziv,
     QPainter painterTextNalepkePrint(&printer);
 
     // PDF okvir in Qr
-    painterTextNalepkePdf.drawRect(m_nalepkaCentimeter,
-                                   m_nalepkaCentimeter * 3,
-                                   (m_sirinaNalepke * m_nalepkaCentimeter * 5.35) - (m_nalepkaCentimeter),
-                                   (m_visinaNalepke * m_nalepkaCentimeter * 4.6) - (m_nalepkaCentimeter));
+    painterTextNalepkePdf.drawRect(m_nalepkaCentimeter / 2,
+                                   m_nalepkaCentimeter / 2,
+                                   m_sirinaNalepke - m_nalepkaCentimeter * 2,
+                                   m_visinaNalepke - m_nalepkaCentimeter * 2);
 
-    painterTextNalepkePdf.drawPixmap(((m_sirinaNalepke * m_nalepkaCentimeter) * 2.2) - m_qrVelikost,
-                                     ((m_visinaNalepke * m_nalepkaCentimeter) * 2.7) - m_qrVelikost,
-                                       m_nalepkaCentimeter * 20,
-                                       m_nalepkaCentimeter * 20, map);
+    painterTextNalepkePdf.drawPixmap(((m_sirinaNalepke - m_nalepkaCentimeter * 4) / 2),
+                                     m_visinaNalepke - (m_qrVelikost + m_nalepkaCentimeter / 2),
+                                     m_nalepkaCentimeter*3,
+                                     m_nalepkaCentimeter*3, map);
 
+    painterTextNalepkePrint.drawRect(m_nalepkaCentimeter / 2,
+                                     m_nalepkaCentimeter / 2,
+                                     m_sirinaNalepke - m_nalepkaCentimeter * 2,
+                                     m_visinaNalepke - m_nalepkaCentimeter * 2);
 
+    painterTextNalepkePrint.drawPixmap(((m_sirinaNalepke - m_nalepkaCentimeter * 4) / 2),
+                                        m_visinaNalepke - (m_qrVelikost + m_nalepkaCentimeter / 2),
+                                        m_nalepkaCentimeter*3,
+                                        m_nalepkaCentimeter*3, map);
 
-    painterTextNalepkePrint.drawRect(-m_nalepkaCentimeter,
-                                     m_nalepkaCentimeter/2,
-                                     m_sirinaNalepke - 2*m_nalepkaCentimeter,
-                                     m_visinaNalepke - 2*m_nalepkaCentimeter);
-    /*
-    painterTextNalepkePrint.drawPixmap((m_sirinaNalepke / 2) - m_qrVelikost,
-                                        m_visinaNalepke - m_qrVelikost,
-                                        m_nalepkaCentimeter*2,
-                                        m_nalepkaCentimeter*2, map);
-
-
-    // PRINT okvir in Qr
-    painterTextNalepkePrint.drawRect(m_nalepkaCentimeter/2,
-                                     m_nalepkaCentimeter/1.5,
-                                     (m_sirinaNalepke * m_nalepkaCentimeter) - (m_nalepkaCentimeter * 1.2),
-                                     (m_visinaNalepke * m_nalepkaCentimeter) - (m_nalepkaCentimeter * 1.9));
-
-    painterTextNalepkePrint.drawPixmap(m_sirinaNalepke * m_nalepkaCentimeter - (m_qrVelikost * 1.2),
-                                       m_visinaNalepke * m_nalepkaCentimeter - (m_qrVelikost / 1.15),
-                                       m_nalepkaCentimeter * 3,
-                                       m_nalepkaCentimeter * 3, map);
-    */
     QString header("Elra Seti d.o.o., Andraž nad Polzelo 74/a, 3313 Polzela");
     QFont bigFontStandard("Tahoma",20);
     QFont mediumFontStandard("Tahoma",11);
@@ -205,55 +198,55 @@ void Methods::NalepkaPrint(const QString& id, const QString& naziv,
     QFont bigFontNapis("Tahoma",50);
     QFont mediumFontNapis("Tahoma",35);
     QPointF textPos;
-    textPos.setX(qreal((m_sirinaNalepke * m_nalepkaCentimeter * 5.5) / 2));
+    textPos.setX(qreal(m_XofSet));
     // STANDARD NACIN (KO GRE ZA NALEPKO Z ID, NAZIVOM, KOLICINO IN OPOMBO
     if(nacin == NacinTiska::Standard) {
         // PDF id, naziv, kolicina
         painterTextNalepkePdf.setFont(smallFontHeader);
-        textPos.setY(qreal(m_nalepkaCentimeter * 1.5));
+        textPos.setY(qreal(m_ofSetHeader));
         drawText(painterTextNalepkePdf, textPos, m_alignment, header, boundingRect);
 
         painterTextNalepkePdf.setFont(bigFontStandard);
-        textPos.setY(qreal(m_nalepkaCentimeter * 5));
+        textPos.setY(qreal(m_ofSetListIzdelka_FirstLine));
         drawText(painterTextNalepkePdf, textPos, m_alignment, "LIST IZDELKA", boundingRect);
 
         painterTextNalepkePdf.setFont(mediumFontStandard);
-        textPos.setY(qreal(m_nalepkaCentimeter * 8));
+        textPos.setY(qreal(m_ofSetId_OneLine));
         drawText(painterTextNalepkePdf, textPos, m_alignment, "ID izdelka: " + id, boundingRect);
 
-        textPos.setY(qreal(m_nalepkaCentimeter * 10));
+        textPos.setY(qreal(m_ofSetNaziv_SecondLine));
         drawText(painterTextNalepkePdf, textPos, m_alignment, "Naziv izdelka: " + naziv, boundingRect);
 
-        textPos.setY(qreal(m_nalepkaCentimeter * 12));
+        textPos.setY(qreal(m_ofSetKolicina));
         drawText(painterTextNalepkePdf, textPos, m_alignment, "Količina: " + kolicina, boundingRect);
 
         // PRINT id, naziv, kolicina
 
         painterTextNalepkePrint.setFont(smallFontHeader);
-        textPos.setX(qreal((m_sirinaNalepke*m_nalepkaCentimeter) / 2));
-        textPos.setY(qreal(m_nalepkaCentimeter / 2.2));
+        textPos.setX(qreal(m_XofSet));
+        textPos.setY(qreal(m_ofSetHeader));
         drawText(painterTextNalepkePrint, textPos, m_alignment, header, boundingRect);
 
         painterTextNalepkePrint.setFont(bigFontStandard);
-        textPos.setY(qreal(m_nalepkaCentimeter * 1));
+        textPos.setY(qreal(m_ofSetListIzdelka_FirstLine));
         drawText(painterTextNalepkePrint, textPos, m_alignment, "LIST IZDELKA", boundingRect);
 
         painterTextNalepkePrint.setFont(mediumFontStandard);
-        textPos.setY(qreal(m_nalepkaCentimeter * 1.5));
+        textPos.setY(qreal(m_ofSetId_OneLine));
         drawText(painterTextNalepkePrint, textPos, m_alignment, "ID izdelka: " + id, boundingRect);
 
-        textPos.setY(qreal(m_nalepkaCentimeter * 2));
+        textPos.setY(qreal(m_ofSetNaziv_SecondLine));
         drawText(painterTextNalepkePrint, textPos, m_alignment, "Naziv izdelka: " + naziv, boundingRect);
 
-        textPos.setY(qreal(m_nalepkaCentimeter * 2.5));
+        textPos.setY(qreal(m_ofSetKolicina));
         drawText(painterTextNalepkePrint, textPos, m_alignment, "Količina: " + kolicina, boundingRect);
     }
     // NAPIS (KO GRE SAMO ZA NAPIS ALI QR KODO
     else if(nacin == NacinTiska::Napis) {
-        textPos.setX(qreal((m_sirinaNalepke * m_nalepkaCentimeter * 5.5) / 2));
+        textPos.setX(qreal(m_XofSet));
         // PDF qr napis ali kratek text
         painterTextNalepkePdf.setFont(smallFontHeader);
-        textPos.setY(qreal(m_nalepkaCentimeter * 1.5));
+        textPos.setY(qreal(m_ofSetHeader));
         drawText(painterTextNalepkePdf, textPos, m_alignment, header, boundingRect);
 
         QStringList list = naziv.split(";", QString::SkipEmptyParts);
@@ -261,43 +254,43 @@ void Methods::NalepkaPrint(const QString& id, const QString& naziv,
         switch(list.length())
         {
             case 1: { painterTextNalepkePdf.setFont(bigFontNapis);
-                      textPos.setY(qreal(m_nalepkaCentimeter * 7));
+                      textPos.setY(qreal(m_ofSetId_OneLine));
                       drawText(painterTextNalepkePdf, textPos, m_alignment, list.at(0), boundingRect);
                       break; }
             case 2: { painterTextNalepkePdf.setFont(mediumFontNapis);
-                      textPos.setY(qreal(m_nalepkaCentimeter * 5));
+                      textPos.setY(qreal(m_ofSetListIzdelka_FirstLine));
                       drawText(painterTextNalepkePrint, textPos, m_alignment, list.at(0), boundingRect);
 
-                      textPos.setY(qreal(m_nalepkaCentimeter * 10.5));
+                      textPos.setY(qreal(m_ofSetNaziv_SecondLine));
                       drawText(painterTextNalepkePdf, textPos, m_alignment, list.at(1), boundingRect);
                       break; }
             default: {painterTextNalepkePdf.setFont(bigFontNapis);
-                      textPos.setY(qreal(m_nalepkaCentimeter * 7));
+                      textPos.setY(qreal(m_ofSetId_OneLine));
                       drawText(painterTextNalepkePdf, textPos, m_alignment, "QR KODA", boundingRect);
                       break; }
          }
 
         // PRINT qr napis ali kratek text
         painterTextNalepkePrint.setFont(smallFontHeader);
-        textPos.setX((m_sirinaNalepke*m_nalepkaCentimeter) / 2);
-        textPos.setY(qreal(m_nalepkaCentimeter / 2.2));
+        textPos.setX(m_XofSet);
+        textPos.setY(qreal(m_ofSetHeader));
         drawText(painterTextNalepkePrint, textPos, m_alignment, header, boundingRect);
 
         switch(list.length())
         {
             case 1: { painterTextNalepkePrint.setFont(bigFontNapis);
-                      textPos.setY(qreal(m_nalepkaCentimeter * 1.5));
+                      textPos.setY(qreal(m_ofSetId_OneLine));
                       drawText(painterTextNalepkePrint, textPos, m_alignment, list.at(0), boundingRect);
                       break; }
             case 2: { painterTextNalepkePrint.setFont(mediumFontNapis);
-                      textPos.setY(qreal(m_nalepkaCentimeter * 1.1));
+                      textPos.setY(qreal(m_ofSetListIzdelka_FirstLine));
                       drawText(painterTextNalepkePrint, textPos, m_alignment, list.at(0), boundingRect);
 
-                      textPos.setY(qreal(m_nalepkaCentimeter * 2.05));
+                      textPos.setY(qreal(m_ofSetNaziv_SecondLine));
                       drawText(painterTextNalepkePrint, textPos, m_alignment, list.at(1), boundingRect);
                       break; }
             default: {painterTextNalepkePrint.setFont(bigFontNapis);
-                      textPos.setY(qreal(m_nalepkaCentimeter * 1.5));
+                      textPos.setY(qreal(m_ofSetId_OneLine));
                       drawText(painterTextNalepkePrint, textPos, m_alignment, "QR KODA", boundingRect);
                       break; }
          }
