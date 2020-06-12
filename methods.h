@@ -50,7 +50,7 @@ public:
     // Methods
     virtual void Reset();
     virtual void keyReleaseEvent(QKeyEvent*);
-    void drawText(QPainter&, const QPointF&,
+    void drawText(QPainter&, QPointF&,
                   Qt::Alignment&, const QString&,
                   QRectF*);
     void drawQr(QPixmap&, const QString&,
@@ -68,6 +68,12 @@ protected:
     short m_qrVelikost;
     short m_sirinaNalepke;
     short m_visinaNalepke;
+    short m_ofSetHeader;
+    short m_ofSetListIzdelka_FirstLine;
+    short m_ofSetId_OneLine;
+    short m_ofSetNaziv_SecondLine;
+    short m_ofSetKolicina;
+    short m_XofSet;
 };
 
 #endif // METHODS_H

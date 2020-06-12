@@ -17,8 +17,8 @@ novaNalepka::novaNalepka(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Qr koda");
     ui->pushButton_natisni->setDisabled(true);
-    ui->lineEdi_napis_prvaCrta->setMaxLength(14);
-    ui->lineEdit_napis_drugaCrta->setMaxLength(14);
+    ui->lineEdi_napis_prvaCrta->setMaxLength(9);
+    ui->lineEdit_napis_drugaCrta->setMaxLength(9);
     ui->spinBox_kopijePrint->setValue(1); 
     m_numOfCopies = ui->spinBox_kopijePrint->value();
     ui->lineEdi_napis_prvaCrta->setFocus();
