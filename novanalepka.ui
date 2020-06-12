@@ -17,10 +17,10 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="label_napis">
+      <widget class="QLabel" name="label_napis_prvaCrta">
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>130</width>
          <height>0</height>
         </size>
        </property>
@@ -37,7 +37,7 @@
         <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
-        <string>Napis:</string>
+        <string>Napis #1:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -45,17 +45,52 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_napis"/>
+      <widget class="QLineEdit" name="lineEdi_napis_prvaCrta"/>
      </item>
     </layout>
    </item>
    <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_napis_drugaCrta">
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::WinPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <property name="text">
+        <string>Napis #2:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_napis_drugaCrta"/>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_qrNapis">
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>130</width>
          <height>0</height>
         </size>
        </property>
@@ -97,13 +132,13 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>130</width>
          <height>0</height>
         </size>
        </property>
@@ -120,7 +155,7 @@
         <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
-        <string>Shranki kot:</string>
+        <string>Shrani nalepko kot:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -132,7 +167,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="pushButton_close">
@@ -166,7 +201,12 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>lineEdi_napis_prvaCrta</tabstop>
+  <tabstop>lineEdit_napis_drugaCrta</tabstop>
+  <tabstop>textEdit_qrNapis</tabstop>
+  <tabstop>lineEdit_shrani</tabstop>
   <tabstop>pushButton_natisni</tabstop>
+  <tabstop>spinBox_kopijePrint</tabstop>
   <tabstop>pushButton_close</tabstop>
  </tabstops>
  <resources/>
@@ -178,8 +218,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>251</y>
+     <x>89</x>
+     <y>475</y>
     </hint>
     <hint type="destinationlabel">
      <x>106</x>
