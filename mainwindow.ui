@@ -43,7 +43,7 @@
           </property>
           <property name="icon">
            <iconset resource="icons.qrc">
-            <normaloff>:/icons/print.ico</normaloff>:/icons/print.ico</iconset>
+            <normaloff>:/icons/icon.ico</normaloff>:/icons/icon.ico</iconset>
           </property>
          </widget>
         </item>
@@ -315,6 +315,7 @@
     <addaction name="actionNov_napis"/>
     <addaction name="actionPrint"/>
     <addaction name="actionShrani_nalepko"/>
+    <addaction name="actionTiskalnik"/>
     <addaction name="separator"/>
     <addaction name="actionIzhod"/>
    </widget>
@@ -399,6 +400,15 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionTiskalnik">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/print.ico</normaloff>:/icons/print.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Tiskalnik...</string>
    </property>
   </action>
  </widget>

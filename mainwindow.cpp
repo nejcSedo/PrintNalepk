@@ -65,7 +65,7 @@ void MainWindow::Reset()
     ui->lineEdit_IDprodukta->setFocus();
 }
 
-// ITEM V TREEWIDGET
+// ITEM V TREEWIDGET OVERRIDE METODA
 void MainWindow::AddRootToTreeWidget(const QString& id, const QString& naziv,
                                      QTreeWidgetItem* itm)
 {
@@ -478,4 +478,14 @@ void MainWindow::on_actionNov_napis_triggered()
     ustvariNalepko->setModal(true);
     ustvariNalepko->exec();
     delete ustvariNalepko;
+}
+
+// IZBERE PRINTER
+void MainWindow::on_actionTiskalnik_triggered()
+{
+    AllPrinters();
+    Printers* selectPrinter = new Printers(this);
+    selectPrinter->setModal(true);
+    selectPrinter->exec();
+    delete selectPrinter;
 }

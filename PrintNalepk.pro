@@ -22,17 +22,20 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     methods.cpp \
-    novanalepka.cpp
+    novanalepka.cpp \
+    printers.cpp
 
 HEADERS += \
     QrCode.hpp \
     mainwindow.h \
     methods.h \
-    novanalepka.h
+    novanalepka.h \
+    printers.h
 
 FORMS += \
     mainwindow.ui \
-    novanalepka.ui
+    novanalepka.ui \
+    printers.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

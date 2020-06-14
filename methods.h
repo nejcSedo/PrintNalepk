@@ -16,12 +16,15 @@
 #include <QTextStream>
 #include <QTreeWidgetItem>
 #include <QKeyEvent>
+#include <QPrinterInfo>
 
+#include <QDebug>
 #include "QrCode.hpp"
 
 class Methods : public QMainWindow
 {
     friend class novaNalepka;
+    friend class Printers;
     Q_OBJECT
 
 // PUBLIC VARS
@@ -48,6 +51,8 @@ public:
     // Destructor
     ~Methods();
     // Methods
+    virtual void AddRootToTreeWidget(const QString&, const QString&,
+                                     QTreeWidgetItem*);
     virtual void Reset();
     virtual void keyReleaseEvent(QKeyEvent*);
     void drawText(QPainter&, QPointF&,
@@ -59,6 +64,7 @@ public:
                       const QString&, const QString&,
                       const int&, const NacinTiska&);
     void ErrorCall(QFile&, const ErrorType&);
+    void AllPrinters();
 
 // PRIVATE VARS
 protected:
@@ -68,12 +74,21 @@ protected:
     short m_qrVelikost;
     short m_sirinaNalepke;
     short m_visinaNalepke;
-    short m_ofSetHeader;
-    short m_ofSetListIzdelka_FirstLine;
-    short m_ofSetId_OneLine;
-    short m_ofSetNaziv_SecondLine;
-    short m_ofSetKolicina;
+    short m_ofSet_Header;
+    short m_ofSet_ListIzdelka_FirstLine;
+    short m_ofSet_Id_OneLine;
+    short m_ofSet_Naziv_SecondLine;
+    short m_ofSet_Kolicina;
     short m_XofSet;
+    double m_ofSet_PDF;
+    QString m_headerText;
+    QFont m_bigFontStandard;
+    QFont m_mediumFontStandard;
+    QFont m_smallFontHeader;
+    QFont m_bigFontNapis;
+    QFont m_mediumFontNapis;
+    QString m_printerSelected;
+    QList<QPrinterInfo> m_printerList;
 };
 
 #endif // METHODS_H

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "novanalepka.h"
 #include "methods.h"
+#include "printers.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -12,6 +13,7 @@ QT_END_NAMESPACE
 class MainWindow : public Methods
 {
     Q_OBJECT
+    friend Printers;
 
 // PUBLIC METHODS
 public:
@@ -22,7 +24,7 @@ public:
     //Methods
     void Reset() override;
     void AddRootToTreeWidget(const QString&, const QString&,
-                             QTreeWidgetItem*);
+                             QTreeWidgetItem*) override;
     void ReadFileAndAddToTreeWidget();
     void Search(const QString&, const QString&);
     void keyReleaseEvent(QKeyEvent*) override;
@@ -46,6 +48,8 @@ private slots:
     void on_textEdit_opombe_textChanged();
 
 // PRIVATE VARS
+    void on_actionTiskalnik_triggered();
+
 private:
     Ui::MainWindow *ui;
     bool m_count;
