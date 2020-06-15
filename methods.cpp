@@ -5,10 +5,10 @@ Methods::Methods(QWidget *parent) :
     QMainWindow(parent),
     m_nalepkaText(""),
     m_alignment(Qt::AlignVCenter | Qt::AlignHCenter),
-    m_nalepkaCentimeter(10),
-    m_qrVelikost(m_nalepkaCentimeter * 10),
-    m_sirinaNalepke(90),
-    m_visinaNalepke(70),
+    m_nalepkaCentimeter(100),
+    m_qrVelikost(m_nalepkaCentimeter * 3),
+    m_sirinaNalepke(950),
+    m_visinaNalepke(700),
     m_ofSet_Header(m_nalepkaCentimeter / 3),
     m_ofSet_ListIzdelka_FirstLine(m_nalepkaCentimeter * 0.8),
     m_ofSet_Id_OneLine(m_nalepkaCentimeter * 1.4),
@@ -22,7 +22,6 @@ Methods::Methods(QWidget *parent) :
     m_smallFontHeader("Tahoma",9),
     m_bigFontNapis("Tahoma",50),
     m_mediumFontNapis("Tahoma",35),
-    m_printerSelected("Rollo Printer"),
     m_printerList(QPrinterInfo::availablePrinters())
 {
 
@@ -161,7 +160,7 @@ void Methods::NalepkaPrint(const QString& id, const QString& naziv,
     // SHRANJEVANJE V PDF
     m_nalepkaText = QDate::currentDate().toString("d_M_yyyy") + "-" + id + ".pdf";
     const QString nalepkaFile("./nalepke/" + m_nalepkaText);
-    const QPageSize pageSize(QSizeF(m_visinaNalepke, m_sirinaNalepke), QPageSize::Millimeter);
+    const QPageSize pageSize(QSizeF(m_visinaNalepke / 10, m_sirinaNalepke / 10), QPageSize::Millimeter);
     const QPageLayout pageLayout(pageSize, QPageLayout::Landscape,QMargins(0, 0, 0, 0));
 
     QPdfWriter nalepkaPdf(nalepkaFile);
@@ -178,10 +177,10 @@ void Methods::NalepkaPrint(const QString& id, const QString& naziv,
                                    (m_sirinaNalepke * m_ofSet_PDF) - ((m_nalepkaCentimeter * 1.5) * m_ofSet_PDF),
                                    (m_visinaNalepke * m_ofSet_PDF) - ((m_nalepkaCentimeter * 1.5) * m_ofSet_PDF));
 
-    painterTextNalepkePdf.drawPixmap((((m_sirinaNalepke * m_ofSet_PDF) - (m_nalepkaCentimeter * m_ofSet_PDF * 4)) / 2),
-                                      ((m_visinaNalepke * m_ofSet_PDF) - (m_nalepkaCentimeter * m_ofSet_PDF * 1.5) / 2),
-                                       (m_nalepkaCentimeter * 3) * m_ofSet_PDF,
-                                       (m_nalepkaCentimeter * 3) * m_ofSet_PDF, map);
+    painterTextNalepkePdf.drawPixmap((m_sirinaNalepke * m_ofSet_PDF) - ((m_qrVelikost * m_ofSet_PDF) * 2.2),
+                                     (m_visinaNalepke * m_ofSet_PDF) - ((m_qrVelikost * m_ofSet_PDF) * 1.5),
+                                      m_qrVelikost * m_ofSet_PDF,
+                                      m_qrVelikost * m_ofSet_PDF, map);
 
     // PRINT okvir in Qr
     painterTextNalepkePrint.drawRect(m_nalepkaCentimeter / 2,
@@ -189,10 +188,10 @@ void Methods::NalepkaPrint(const QString& id, const QString& naziv,
                                      m_sirinaNalepke - (m_nalepkaCentimeter * 2),
                                      m_visinaNalepke - (m_nalepkaCentimeter * 2));
 
-    painterTextNalepkePrint.drawPixmap(((m_sirinaNalepke - (m_nalepkaCentimeter * 4)) / 2),
-                                         m_visinaNalepke - (m_qrVelikost + (m_nalepkaCentimeter / 2)),
-                                         m_nalepkaCentimeter * 3,
-                                         m_nalepkaCentimeter * 3, map);
+    painterTextNalepkePrint.drawPixmap(m_sirinaNalepke - m_qrVelikost * 2.2,
+                                       m_visinaNalepke - m_qrVelikost * 1.5,
+                                       m_qrVelikost,
+                                       m_qrVelikost, map);
 
     QRectF* boundingRect = {0};
     QPointF textPos;

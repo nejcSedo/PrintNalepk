@@ -87,8 +87,8 @@ protected:
     QFont m_smallFontHeader;
     QFont m_bigFontNapis;
     QFont m_mediumFontNapis;
-    QString m_printerSelected;
     QList<QPrinterInfo> m_printerList;
+    QString m_printerSelected;
 };
 
 #endif // METHODS_H

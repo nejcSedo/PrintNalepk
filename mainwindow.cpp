@@ -487,5 +487,6 @@ void MainWindow::on_actionTiskalnik_triggered()
     Printers* selectPrinter = new Printers(this);
     selectPrinter->setModal(true);
     selectPrinter->exec();
+    m_printerSelected = selectPrinter->on_buttonBox_clicked();
     delete selectPrinter;
 }

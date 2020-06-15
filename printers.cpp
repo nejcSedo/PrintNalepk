@@ -43,5 +43,13 @@ void Printers::AddRootToTreeWidget()
 
 void Printers::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column)
 {
-    m_newMethod->m_printerSelected = item->text(column);
+    m_printer = item->text(column);
+}
+
+QString Printers::on_buttonBox_clicked()
+{
+    if(ui->buttonBox->Ok)
+        return m_printer;
+    else
+        return 0;
 }
