@@ -21,6 +21,16 @@ int main(int argc, char *argv[])
         MakeFile(fileName);
     }
 
+    QString fileNameProces("proizvodniproces.txt");
+    if(!QFileInfo::exists("./" + fileNameProces))
+        MakeFile(fileNameProces);
+
+    if(!QFileInfo::exists("./release/" + fileNameProces)) {
+        fileNameProces = "release/" + fileNameProces;
+        MakeFile(fileNameProces);
+    }
+
+
     QApplication app(argc, argv);
     MainWindow window;
     window.show();

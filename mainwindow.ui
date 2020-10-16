@@ -305,7 +305,7 @@
      <x>0</x>
      <y>0</y>
      <width>553</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMeni">
@@ -324,7 +324,15 @@
     </property>
     <addaction name="actionO_programu"/>
    </widget>
+   <widget class="QMenu" name="menuProizvodni_proces">
+    <property name="title">
+     <string>Proizvodni proces</string>
+    </property>
+    <addaction name="actionProizvodni_proces"/>
+    <addaction name="actionDodaj_produkt"/>
+   </widget>
    <addaction name="menuMeni"/>
+   <addaction name="menuProizvodni_proces"/>
    <addaction name="menuO_progrramu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -401,6 +409,16 @@
     <string>Ctrl+N</string>
    </property>
   </action>
+  <action name="actionProizvodni_proces">
+   <property name="text">
+    <string>Išči produkt...</string>
+   </property>
+  </action>
+  <action name="actionDodaj_produkt">
+   <property name="text">
+    <string>Dodaj produkt...</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>lineEdit_IDprodukta</tabstop>
@@ -423,8 +441,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>408</x>
-     <y>440</y>
+     <x>253</x>
+     <y>470</y>
     </hint>
     <hint type="destinationlabel">
      <x>522</x>

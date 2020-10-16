@@ -479,3 +479,20 @@ void MainWindow::on_actionNov_napis_triggered()
     ustvariNalepko->exec();
     delete ustvariNalepko;
 }
+
+// PROIZVODNI PROCES
+void MainWindow::on_actionProizvodni_proces_triggered()
+{
+    ProizvodniProces* proces = new ProizvodniProces(this);
+    proces->setModal(true);
+    proces->exec();
+    delete proces;
+}
+
+void MainWindow::on_actionDodaj_produkt_triggered()
+{
+    DodajProdukt* proces = new DodajProdukt(this);
+    proces->setModal(true);
+    proces->exec();
+    delete proces;
+}

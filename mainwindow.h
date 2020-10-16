@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "novanalepka.h"
 #include "methods.h"
+#include "proizvodniproces.h"
+#include "dodajprodukt.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -46,6 +48,10 @@ private slots:
     void on_textEdit_opombe_textChanged();
 
 // PRIVATE VARS
+    void on_actionProizvodni_proces_triggered();
+
+    void on_actionDodaj_produkt_triggered();
+
 private:
     Ui::MainWindow *ui;
     bool m_count;
