@@ -5,6 +5,10 @@
 #include <QTextStream>
 #include <QTreeWidgetItem>
 #include <QFile>
+#include <QListWidgetItem>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsPixmapItem>
 
 #include <QDebug>
 
@@ -20,15 +24,25 @@ public:
     explicit ProizvodniProces(QWidget *parent = nullptr);
     ~ProizvodniProces();
     void Search(const QString&);
-    void AddRootToTreeWidget(const QStringList&, QTreeWidgetItem*);
+    void AddRootToTreeWidget(const QStringList&, QTreeWidgetItem*, QString&, bool);
 
 private slots:
     void on_lineEdit_isciProdukt_textChanged(const QString &arg1);
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
+    void on_pushButton_pocisti_clicked();
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_pushButton_skrijSliko_clicked();
 
 private:
     Ui::ProizvodniProces *ui;
     QString m_searchLine;
     QStringList m_searchList;
+    QColor m_green;
+    QColor m_white;
+    QColor m_grey;
+    QColor m_opis;
+    QString m_picFolder;
 };
 
 #endif // PROIZVODNIPROCES_H

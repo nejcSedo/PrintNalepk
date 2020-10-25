@@ -14,46 +14,7 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::WinPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <property name="text">
-        <string>Naziv:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit"/>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_5">
@@ -96,14 +57,124 @@
        </item>
        <item>
         <property name="text">
-         <string>Kabel / snop / veriga</string>
+         <string>Kabel</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Veriga</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Snop</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Drugo</string>
         </property>
        </item>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::WinPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <property name="text">
+        <string>Naziv:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+    </layout>
+   </item>
+   <item row="6" column="0">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Dodaj</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QTableWidget" name="tableWidget">
+     <column>
+      <property name="text">
+       <string>Opomba</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Številka orodja</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Dožina vodnika</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Oznaka</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Barva vodnika</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Oznaka</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Dolžina vodnika</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Številka orodja</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Opomba</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="3" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QLabel" name="label_6">
@@ -142,7 +213,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_2">
@@ -200,54 +271,15 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
-    <widget class="QTableWidget" name="tableWidget">
-     <column>
-      <property name="text">
-       <string>Opomba</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Št. orodja (nastavitev glave)</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Dožina vodnika</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Barva vodnika</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Dolžina vodnika</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Št. orodja (nastavitev glave)</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Opomba</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QPushButton" name="pushButton">
-     <property name="text">
-      <string>Dodaj</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>comboBox_vrstaProdukta</tabstop>
+  <tabstop>comboBox_stevilozil</tabstop>
+  <tabstop>tableWidget</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
