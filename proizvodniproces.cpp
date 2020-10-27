@@ -1,9 +1,11 @@
+//m_picFolder("C:\\Users\\Admin\\Documents\\dev\\build-PrintNalepk-Desktop_Qt_5_14_2_MinGW_64_bit-Release\\images\\")
+
 #include "proizvodniproces.h"
 #include "ui_proizvodniproces.h"
 
 ProizvodniProces::ProizvodniProces(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ProizvodniProces), m_searchLine(""), m_searchList(), m_green(0,170,0), m_white(255,255,255), m_grey(220,220,220), m_opis(176,224,230), m_picFolder("C:\\Users\\Admin\\Documents\\dev\\build-PrintNalepk-Desktop_Qt_5_14_2_MinGW_64_bit-Release\\images\\"), m_naziv_bool(false)
+    ui(new Ui::ProizvodniProces), m_searchLine(""), m_searchList(), m_green(0,170,0), m_white(255,255,255), m_grey(220,220,220), m_opis(176,224,230), m_picFolder("C:\\Users\\sedov\\Documents\\Qt projekti\\build-PrintNalepk-Desktop_Qt_5_15_1_MinGW_64_bit-Release\\images\\"), m_naziv_bool(false), m_numOfImages(0)
 {
     ui->setupUi(this);
     this->setWindowTitle("Proizvodni proces");
@@ -199,19 +201,42 @@ void ProizvodniProces::on_lineEdit_isciProdukt_textChanged(const QString &arg1)
     Search(arg1);
 }
 
+
+void ProizvodniProces::ClearWidgets(QLayout * layout)
+{
+   if (! layout)
+      return;
+   while (auto item = layout->takeAt(0)) {
+      delete item->widget();
+      ClearWidgets(item->layout());
+   }
+}
+
 void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     if(item->background(4) == QBrush(m_opis))
     {
-        ui->label_image->clear();
+        ClearWidgets(ui->verticalLayout_image);
         QString imageName(item->text(4));
         imageName.remove("Vodnik\n");
         imageName.remove("Kabel\n");
         imageName.remove("Veriga\n");
         imageName.remove("Snop\n");
         imageName.remove("Drugo\n");
-        QPixmap image(m_picFolder + imageName + ".jpg");
-        ui->label_image->setPixmap(image);
+        QDirIterator it(m_picFolder, QStringList() << imageName + "*", QDir::Files, QDirIterator::Subdirectories);
+        while(it.hasNext())
+        {
+            m_numOfImages++;
+            it.next();
+        }
+
+        for(int i(0); i < m_numOfImages; i++)
+        {
+            QPixmap image(m_picFolder + imageName + "_" + QString::number(i) + ".jpg");
+            QLabel* label = new QLabel();
+            label->setPixmap(image.scaled(this->width(), this->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            ui->verticalLayout_image->addWidget(label);
+        }
     }
 
     if(item->background(column) == QBrush(m_green))
@@ -246,7 +271,7 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
 
 void ProizvodniProces::on_pushButton_pocisti_clicked()
 {
-    ui->label_image->clear();
+    ClearWidgets(ui->verticalLayout_image);
     ui->lineEdit_isciProdukt->clear();
     ui->listWidget->clear();
     ui->treeWidget->clear();
@@ -412,5 +437,5 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 
 void ProizvodniProces::on_pushButton_skrijSliko_clicked()
 {
-    ui->label_image->clear();
+    ClearWidgets(ui->verticalLayout_image);
 }

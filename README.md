@@ -27,7 +27,4 @@ Spremenjena koda, dodan class Methods, dodana možnost tiska število kopij, spr
 # v1.8
 Popravljena novaNalepka
 
-# v1.9
-Dodan proizvodni proces in dodajanje produkta v proizvodni proces
-
 # Nejc Sedovnik, April 2020

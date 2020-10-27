@@ -29,9 +29,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
+        <y>-154</y>
         <width>1063</width>
-        <height>609</height>
+        <height>607</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
@@ -44,34 +44,16 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="5" column="0">
-           <widget class="QTreeWidget" name="treeWidget">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>300</height>
-             </size>
-            </property>
-            <column>
-             <property name="text">
-              <string notr="true">1</string>
-             </property>
-            </column>
-           </widget>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="lineEdit_isciProdukt"/>
           </item>
-          <item row="2" column="0">
-           <widget class="QListWidget" name="listWidget">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>100</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>100</height>
-             </size>
+          <item row="8" column="0">
+           <layout class="QVBoxLayout" name="verticalLayout_image"/>
+          </item>
+          <item row="7" column="0">
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -98,6 +80,51 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QTreeWidget" name="treeWidget">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>300</height>
+             </size>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="pushButton_pocisti">
+            <property name="text">
+             <string>Počisti seznam</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QPushButton" name="pushButton_skrijSliko">
+            <property name="text">
+             <string>Skrij sliko</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QListWidget" name="listWidget">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -181,30 +208,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="label_image">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QPushButton" name="pushButton_pocisti">
-            <property name="text">
-             <string>Počisti seznam</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLineEdit" name="lineEdit_isciProdukt"/>
-          </item>
-          <item row="6" column="0">
-           <widget class="QPushButton" name="pushButton_skrijSliko">
-            <property name="text">
-             <string>Skrij sliko</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>
