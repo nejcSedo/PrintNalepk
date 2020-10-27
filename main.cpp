@@ -30,6 +30,24 @@ int main(int argc, char *argv[])
         MakeFile(fileNameProces);
     }
 
+    QString fileNameOrodje("orodja.txt");
+    if(!QFileInfo::exists("./" + fileNameOrodje))
+        MakeFile(fileNameOrodje);
+
+    if(!QFileInfo::exists("./release/" + fileNameOrodje)) {
+        fileNameOrodje = "release/" + fileNameOrodje;
+        MakeFile(fileNameOrodje);
+    }
+
+    QString fileNameBarve("barve.txt");
+    if(!QFileInfo::exists("./" + fileNameBarve))
+        MakeFile(fileNameBarve);
+
+    if(!QFileInfo::exists("./release/" + fileNameBarve)) {
+        fileNameBarve = "release/" + fileNameBarve;
+        MakeFile(fileNameBarve);
+    }
+
 
     QApplication app(argc, argv);
     MainWindow window;
@@ -42,7 +60,6 @@ void MakeFile(const QString& fileName)
 {
     QFile file("./" + fileName);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
-    file.write("Seznam nalepk:\n");
     file.flush();
     file.close();
 }

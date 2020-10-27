@@ -25,6 +25,7 @@ public:
     ~ProizvodniProces();
     void Search(const QString&);
     void AddRootToTreeWidget(const QStringList&, QTreeWidgetItem*, QString&, bool);
+    void OpisProdukta(QStringList&);
 
 private slots:
     void on_lineEdit_isciProdukt_textChanged(const QString &arg1);
@@ -43,6 +44,7 @@ private:
     QColor m_grey;
     QColor m_opis;
     QString m_picFolder;
+    bool m_naziv_bool;
 };
 
 #endif // PROIZVODNIPROCES_H

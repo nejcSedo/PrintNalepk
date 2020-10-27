@@ -9,16 +9,18 @@ DodajProdukt::DodajProdukt(QWidget *parent) :
     this->setWindowTitle("Dodaj produkt");
     this->showMaximized();
     ui->tableWidget->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Interactive);
     ui->comboBox_stevilozil->insertItem(0, "1");
     ui->comboBox_stevilozil->setDisabled(true);
-    m_steviloZil = 0;
+    m_steviloZil = 1;
     ui->lineEdit->setFocus();
 }
 
@@ -39,7 +41,10 @@ void DodajProdukt::on_pushButton_clicked()
 
     QString naziv("");
     if(ui->comboBox_vrstaProdukta->currentIndex() == 0)
+    {
+        m_steviloZil = 1;
         naziv = "V;";
+    }
     else if(ui->comboBox_vrstaProdukta->currentIndex() == 1)
         naziv = "K;";
     else if(ui->comboBox_vrstaProdukta->currentIndex() == 2)
