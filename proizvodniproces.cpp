@@ -1,36 +1,42 @@
-//m_picFolder("C:\\Users\\Admin\\Documents\\dev\\build-PrintNalepk-Desktop_Qt_5_14_2_MinGW_64_bit-Release\\images\\")
+//
 
 #include "proizvodniproces.h"
 #include "ui_proizvodniproces.h"
 
 ProizvodniProces::ProizvodniProces(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ProizvodniProces), m_searchLine(""), m_searchList(), m_green(0,170,0), m_white(255,255,255), m_grey(220,220,220), m_opis(176,224,230), m_picFolder("C:\\Users\\sedov\\Documents\\Qt projekti\\build-PrintNalepk-Desktop_Qt_5_15_1_MinGW_64_bit-Release\\images\\"), m_naziv_bool(false), m_numOfImages(0)
+    ui(new Ui::ProizvodniProces), m_searchLine(""), m_searchList(), m_green(0,170,0),
+    m_white(255,255,255), m_grey(220,220,220), m_opis(176,224,230),
+    m_picFolder("C:\\Users\\Admin\\Documents\\dev\\build-PrintNalepk-Desktop_Qt_5_14_2_MinGW_64_bit-Release\\images\\"),
+    m_naziv_bool(false), m_numOfImages(0)
 {
     ui->setupUi(this);
     this->setWindowTitle("Proizvodni proces");
     this->showMaximized();
     QStringList glava;
     glava.append("Opomba");
-    glava.append("Št. orodja: (zgornja gl. / spodnja gl.)");
+    glava.append("Št. orodja  :\n(zgornja gl. - spodnja gl.)");
     glava.append("Dolžina");
     glava.append("Oznaka");
     glava.append("Barva vodnika");
     glava.append("Oznaka");
     glava.append("Dolžina");
-    glava.append("Št. orodja: (zgornja gl. / spodnja gl.)");
+    glava.append("Št. orodja  :\n(zgornja gl. - spodnja gl.)");
     glava.append("Opomba");
     ui->treeWidget->setHeaderLabels(glava);
     ui->treeWidget->header()->setDefaultAlignment(Qt::AlignCenter);
     ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ui->treeWidget->header()->setSectionResizeMode(2, QHeaderView::Stretch);
-    ui->treeWidget->header()->setSectionResizeMode(3, QHeaderView::Stretch);
-    ui->treeWidget->header()->setSectionResizeMode(4, QHeaderView::Stretch);
-    ui->treeWidget->header()->setSectionResizeMode(5, QHeaderView::Stretch);
-    ui->treeWidget->header()->setSectionResizeMode(6, QHeaderView::Stretch);
-    ui->treeWidget->header()->setSectionResizeMode(7, QHeaderView::Stretch);
+    ui->treeWidget->header()->setSectionResizeMode(1, QHeaderView::Interactive);
+    ui->treeWidget->header()->setSectionResizeMode(2, QHeaderView::Interactive);
+    ui->treeWidget->header()->setSectionResizeMode(3, QHeaderView::Interactive);
+    ui->treeWidget->header()->setSectionResizeMode(4, QHeaderView::Interactive);
+    ui->treeWidget->header()->setSectionResizeMode(5, QHeaderView::Interactive);
+    ui->treeWidget->header()->setSectionResizeMode(6, QHeaderView::Interactive);
+    ui->treeWidget->header()->setSectionResizeMode(7, QHeaderView::Interactive);
     ui->treeWidget->header()->setSectionResizeMode(8, QHeaderView::Interactive);
+    ui->treeWidget->setRootIsDecorated(false);
+    ui->label_A->setFixedWidth(ui->treeWidget->columnWidth(0) + ui->treeWidget->columnWidth(1) + ui->treeWidget->columnWidth(2) + ui->treeWidget->columnWidth(3));
+    ui->label_B->setFixedWidth(ui->treeWidget->columnWidth(5) + ui->treeWidget->columnWidth(6) + ui->treeWidget->columnWidth(7) + ui->treeWidget->columnWidth(8));
     QFont font("Arial", 20, QFont::Bold);
     ui->lineEdit_isciProdukt->setFocus();
 }
@@ -40,7 +46,6 @@ ProizvodniProces::~ProizvodniProces()
     delete ui;
 }
 
-// ISKALNIK
 void ProizvodniProces::Search(const QString& naziv)
 {
     QFile file("proizvodniproces.txt");
@@ -70,7 +75,6 @@ void ProizvodniProces::Search(const QString& naziv)
     file.close();
 }
 
-// ITEM V TREEWIDGET
 void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetItem* itm, QString& naziv, bool naziv_bool)
 {
     if(!naziv_bool)
@@ -95,7 +99,7 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
 
         itm->setText(2, list.at(2));
         itm->setTextAlignment(2, Qt::AlignHCenter | Qt::AlignVCenter);
-        if(list.at(2) == "/" || list.at(2) == "")
+        if(list.at(2) == "/" || list.at(2) == "" || naziv.contains("Vodnik", Qt::CaseInsensitive))
             itm->setBackground(2, QBrush(m_green));
 
         itm->setText(3, list.at(3));
@@ -119,7 +123,7 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
 
         itm->setText(6, list.at(6));
         itm->setTextAlignment(6, Qt::AlignHCenter | Qt::AlignVCenter);
-        if(list.at(6) == "/" || list.at(6) == "")
+        if(list.at(6) == "/" || list.at(6) == "" || naziv.contains("Vodnik", Qt::CaseInsensitive))
             itm->setBackground(6, QBrush(m_green));
 
         itm->setText(7, list.at(7));
@@ -145,7 +149,7 @@ void ProizvodniProces::OpisProdukta(QStringList& partList)
         partList.removeAt(0);
         partList.removeAt(0);
     }
-    if(m_naziv_bool)
+    if(m_naziv_bool && partList.at(1) != "/")
     {
         QFile file("orodja.txt");
 
@@ -163,12 +167,6 @@ void ProizvodniProces::OpisProdukta(QStringList& partList)
         searchList = removeToolHeader.split(':', QString::SkipEmptyParts);
         searchList.replace(1, tmp);
 
-        removeToolHeader = partList.at(7);
-        QStringList searchList2 = removeToolHeader.split('*', QString::SkipEmptyParts);
-        tmp = searchList2.at(1);
-        tmp.remove(" ");
-        searchList2 = removeToolHeader.split(':', QString::SkipEmptyParts);
-        searchList2.replace(1, tmp);
         while(!out.atEnd())
         {
             QString searchLine = out.readLine();
@@ -185,6 +183,35 @@ void ProizvodniProces::OpisProdukta(QStringList& partList)
                 partList.replace(1, searchList.at(0));
 
             }
+        }
+    }
+
+    if(m_naziv_bool && partList.at(7) != "/")
+    {
+        QFile file("orodja.txt");
+
+        if(!file.open(QFile::Text | QFile::ReadOnly))
+            qDebug() << "Error orodja";
+
+        QTextStream out(&file);
+        out.setCodec("UTF-8");
+
+        QString removeToolHeader = partList.at(7);
+        QStringList searchList2 = removeToolHeader.split('*', QString::SkipEmptyParts);
+        QString tmp = searchList2.at(1);
+        tmp.remove(" ");
+        searchList2 = removeToolHeader.split(':', QString::SkipEmptyParts);
+        searchList2.replace(1, tmp);
+        while(!out.atEnd())
+        {
+            QString searchLine = out.readLine();
+
+            QStringList searchList3 = searchLine.split('*', QString::SkipEmptyParts);
+            QString tmp2 = searchList3.at(1);
+            tmp2.remove(" ");
+            searchList3 = searchLine.split(':', QString::SkipEmptyParts);
+            searchList3.replace(1, tmp2);
+
             if(searchList3.at(0) == searchList2.at(0) && searchList3.at(1) == searchList2.at(1))
             {
                 searchLine.replace(":", "  : ");
@@ -201,15 +228,16 @@ void ProizvodniProces::on_lineEdit_isciProdukt_textChanged(const QString &arg1)
     Search(arg1);
 }
 
-
-void ProizvodniProces::ClearWidgets(QLayout * layout)
+void ProizvodniProces::ClearWidgets(QLayout* layout)
 {
-   if (! layout)
-      return;
-   while (auto item = layout->takeAt(0)) {
-      delete item->widget();
-      ClearWidgets(item->layout());
-   }
+    if (!layout)
+        return;
+    while (auto item = layout->takeAt(0))
+    {
+        delete item->widget();
+        ClearWidgets(item->layout());
+        m_numOfImages = 0;
+    }
 }
 
 void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
@@ -230,13 +258,14 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
             it.next();
         }
 
-        for(int i(0); i < m_numOfImages; i++)
+        for(int i(1); i <= m_numOfImages; i++)
         {
             QPixmap image(m_picFolder + imageName + "_" + QString::number(i) + ".jpg");
             QLabel* label = new QLabel();
-            label->setPixmap(image.scaled(this->width(), this->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            label->setPixmap(image.scaled(width(), height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
             ui->verticalLayout_image->addWidget(label);
         }
+        ui->verticalLayout_image->addStretch(1);
     }
 
     if(item->background(column) == QBrush(m_green))

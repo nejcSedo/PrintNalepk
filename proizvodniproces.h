@@ -10,6 +10,7 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QDirIterator>
+#include <QThread>
 
 #include <QDebug>
 

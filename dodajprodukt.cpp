@@ -10,13 +10,13 @@ DodajProdukt::DodajProdukt(QWidget *parent) :
     this->showMaximized();
     ui->tableWidget->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Stretch);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Interactive);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::Interactive);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Interactive);
     ui->comboBox_stevilozil->insertItem(0, "1");
     ui->comboBox_stevilozil->setDisabled(true);
@@ -64,10 +64,17 @@ void DodajProdukt::on_pushButton_clicked()
             if(j == 1 || j == 4 || j == 7)
             {
                 QComboBox *myCB = qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(i,j));
-                QStringList nazivList;
-                nazivList << myCB->currentText();
-                if(nazivList.at(0) != "")
-                    naziv += nazivList.at(0) + ";";
+                if(myCB)
+                {
+                    QStringList nazivList;
+                    nazivList << myCB->currentText();
+                    if(nazivList.at(0) != "")
+                        naziv += nazivList.at(0) + ";";
+                    else
+                        naziv += "/;";
+                }
+                else if(ui->tableWidget->item(i,j))
+                    naziv += ui->tableWidget->item(i,j)->text();
                 else
                     naziv += "/;";
             }
@@ -118,7 +125,7 @@ void DodajProdukt::on_comboBox_vrstaProdukta_currentIndexChanged(int index)
 
 void DodajProdukt::on_comboBox_stevilozil_currentIndexChanged(int index)
 {
-    for(int i(m_steviloZil); i >= 0; i--)
+    for(int i(m_steviloZil); i > 0; i--)
         ui->tableWidget->removeRow(i);
 
     m_steviloZil = 0;
