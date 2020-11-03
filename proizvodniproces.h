@@ -37,6 +37,8 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_pushButton_skrijSliko_clicked();
 
+    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
+
 private:
     Ui::ProizvodniProces *ui;
     QString m_searchLine;

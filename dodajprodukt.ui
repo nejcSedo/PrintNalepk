@@ -129,47 +129,47 @@
     <widget class="QTableWidget" name="tableWidget">
      <column>
       <property name="text">
-       <string>Opomba</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Številka orodja</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Dožina vodnika</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Oznaka</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Barva vodnika</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Oznaka</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Dolžina vodnika</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Številka orodja</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Opomba</string>
+       <string>Nov stolpec</string>
       </property>
      </column>
     </widget>

@@ -8,16 +8,27 @@ DodajProdukt::DodajProdukt(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Dodaj produkt");
     this->showMaximized();
+    QStringList glava;
+    glava.append("Opomba");
+    glava.append("Št. orodja  :\n(zgornja gl. - spodnja gl.)");
+    glava.append("Dolžina");
+    glava.append("Oznaka");
+    glava.append("Barva vodnika");
+    glava.append("Oznaka");
+    glava.append("Dolžina");
+    glava.append("Št. orodja  :\n(zgornja gl. - spodnja gl.)");
+    glava.append("Opomba");
+    ui->tableWidget->setHorizontalHeaderLabels(glava);
     ui->tableWidget->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Interactive);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::Interactive);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Interactive);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Stretch);
     ui->comboBox_stevilozil->insertItem(0, "1");
     ui->comboBox_stevilozil->setDisabled(true);
     m_steviloZil = 1;
@@ -100,6 +111,17 @@ void DodajProdukt::on_pushButton_clicked()
     ui->comboBox_vrstaProdukta->setCurrentIndex(0);
     ui->comboBox_stevilozil->setCurrentIndex(0);
     ui->tableWidget->clear();
+    QStringList glava;
+    glava.append("Opomba");
+    glava.append("Št. orodja  :\n(zgornja gl. - spodnja gl.)");
+    glava.append("Dolžina");
+    glava.append("Oznaka");
+    glava.append("Barva vodnika");
+    glava.append("Oznaka");
+    glava.append("Dolžina");
+    glava.append("Št. orodja  :\n(zgornja gl. - spodnja gl.)");
+    glava.append("Opomba");
+    ui->tableWidget->setHorizontalHeaderLabels(glava);
     ui->lineEdit->setFocus();
 }
 
@@ -117,6 +139,7 @@ void DodajProdukt::on_comboBox_vrstaProdukta_currentIndexChanged(int index)
     {
         ui->comboBox_stevilozil->setDisabled(false);
         ui->tableWidget->removeRow(0);
+        m_steviloZil = 0;
         ui->comboBox_stevilozil->clear();
         for(int i(0); i < 200; i++)
             ui->comboBox_stevilozil->insertItem(i, QString ::number(i + 1));
@@ -125,8 +148,11 @@ void DodajProdukt::on_comboBox_vrstaProdukta_currentIndexChanged(int index)
 
 void DodajProdukt::on_comboBox_stevilozil_currentIndexChanged(int index)
 {
-    for(int i(m_steviloZil); i > 0; i--)
+    for(int i(m_steviloZil); i >= 0; i--)
+    {
         ui->tableWidget->removeRow(i);
+        m_steviloZil--;
+    }
 
     m_steviloZil = 0;
     for(int i(0); i <= index; i++)

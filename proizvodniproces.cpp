@@ -1,5 +1,3 @@
-//
-
 #include "proizvodniproces.h"
 #include "ui_proizvodniproces.h"
 
@@ -25,18 +23,18 @@ ProizvodniProces::ProizvodniProces(QWidget *parent) :
     glava.append("Opomba");
     ui->treeWidget->setHeaderLabels(glava);
     ui->treeWidget->header()->setDefaultAlignment(Qt::AlignCenter);
-    ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(1, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(2, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(3, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(4, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(5, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(6, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(7, QHeaderView::Interactive);
-    ui->treeWidget->header()->setSectionResizeMode(8, QHeaderView::Interactive);
+    ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->treeWidget->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(2, QHeaderView::Stretch);
+    ui->treeWidget->header()->setSectionResizeMode(3, QHeaderView::Stretch);
+    ui->treeWidget->header()->setSectionResizeMode(4, QHeaderView::Stretch);
+    ui->treeWidget->header()->setSectionResizeMode(5, QHeaderView::Stretch);
+    ui->treeWidget->header()->setSectionResizeMode(6, QHeaderView::Stretch);
+    ui->treeWidget->header()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(8, QHeaderView::Stretch);
     ui->treeWidget->setRootIsDecorated(false);
-    ui->label_A->setFixedWidth(ui->treeWidget->columnWidth(0) + ui->treeWidget->columnWidth(1) + ui->treeWidget->columnWidth(2) + ui->treeWidget->columnWidth(3));
-    ui->label_B->setFixedWidth(ui->treeWidget->columnWidth(5) + ui->treeWidget->columnWidth(6) + ui->treeWidget->columnWidth(7) + ui->treeWidget->columnWidth(8));
+    ui->label_A->setFixedWidth(ui->treeWidget->columnWidth(0) + ui->treeWidget->columnWidth(1) + ui->treeWidget->columnWidth(2) + ui->treeWidget->columnWidth(3) + ui->treeWidget->columnWidth(4));
+    ui->label_B->setFixedWidth(ui->treeWidget->columnWidth(4) + ui->treeWidget->columnWidth(5) + ui->treeWidget->columnWidth(6) + ui->treeWidget->columnWidth(7) + ui->treeWidget->columnWidth(8));
     QFont font("Arial", 20, QFont::Bold);
     ui->lineEdit_isciProdukt->setFocus();
 }
@@ -82,6 +80,46 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
         itm->setText(4, naziv);
         itm->setTextAlignment(4, Qt::AlignHCenter | Qt::AlignVCenter);
         itm->setBackground(4, QBrush(m_opis));
+    }
+    else if(list.at(0) == "/" && list.at(1) == "/" && list.at(2) == "/" && list.at(3) == "/" && list.at(4) == "/" &&
+            list.at(5) == "/" && list.at(6) == "/" && list.at(7) == "/" && list.at(8) == "/")
+    {
+        QString presledek("--------------------------");
+        itm->setText(0, presledek);
+        itm->setTextAlignment(0, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(0, QBrush(m_white));
+
+        itm->setText(1, presledek);
+        itm->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(1, QBrush(m_white));
+
+        itm->setText(2, presledek);
+        itm->setTextAlignment(2, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(2, QBrush(m_white));
+
+        itm->setText(3, presledek);
+        itm->setTextAlignment(3, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(3, QBrush(m_white));
+
+        itm->setText(4, presledek);
+        itm->setTextAlignment(4, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(4, QBrush(m_white));
+
+        itm->setText(5, presledek);
+        itm->setTextAlignment(5, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(5, QBrush(m_white));
+
+        itm->setText(6, presledek);
+        itm->setTextAlignment(6, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(6, QBrush(m_white));
+
+        itm->setText(7, presledek);
+        itm->setTextAlignment(7, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(7, QBrush(m_white));
+
+        itm->setText(8, presledek);
+        itm->setTextAlignment(8, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(8, QBrush(m_white));
     }
     else
     {
@@ -304,6 +342,7 @@ void ProizvodniProces::on_pushButton_pocisti_clicked()
     ui->lineEdit_isciProdukt->clear();
     ui->listWidget->clear();
     ui->treeWidget->clear();
+    ui->label_opis->clear();
 }
 
 void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
@@ -467,4 +506,9 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 void ProizvodniProces::on_pushButton_skrijSliko_clicked()
 {
     ClearWidgets(ui->verticalLayout_image);
+}
+
+void ProizvodniProces::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
+{
+    ui->label_opis->setText(item->text(column));
 }
