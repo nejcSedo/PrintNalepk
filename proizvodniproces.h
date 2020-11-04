@@ -47,6 +47,7 @@ private:
     QColor m_white;
     QColor m_grey;
     QColor m_opis;
+    QColor m_darkGrey;
     QString m_picFolder;
     bool m_naziv_bool;
     int m_numOfImages;

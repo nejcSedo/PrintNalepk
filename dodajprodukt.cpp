@@ -85,7 +85,10 @@ void DodajProdukt::on_pushButton_clicked()
                         naziv += "/;";
                 }
                 else if(ui->tableWidget->item(i,j))
-                    naziv += ui->tableWidget->item(i,j)->text();
+                                            {
+                    naziv += ui->tableWidget->item(i,j)->text() + ";";
+                    qDebug() << naziv;
+                }
                 else
                     naziv += "/;";
             }

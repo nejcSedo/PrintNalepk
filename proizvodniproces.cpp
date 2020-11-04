@@ -4,7 +4,7 @@
 ProizvodniProces::ProizvodniProces(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProizvodniProces), m_searchLine(""), m_searchList(), m_green(0,170,0),
-    m_white(255,255,255), m_grey(220,220,220), m_opis(176,224,230),
+    m_white(255,255,255), m_grey(220,220,220), m_opis(176,224,230), m_darkGrey(255,255,130),
     m_picFolder("C:\\Users\\Admin\\Documents\\dev\\build-PrintNalepk-Desktop_Qt_5_14_2_MinGW_64_bit-Release\\images\\"),
     m_naziv_bool(false), m_numOfImages(0)
 {
@@ -81,7 +81,7 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
         itm->setTextAlignment(4, Qt::AlignHCenter | Qt::AlignVCenter);
         itm->setBackground(4, QBrush(m_opis));
     }
-    else if(list.at(0) == "/" && list.at(1) == "/" && list.at(2) == "/" && list.at(3) == "/" && list.at(4) == "/" &&
+    else if(list.at(0) == "/" && list.at(1) == "/" && list.at(2) == "/" && list.at(3) == "/" &&
             list.at(5) == "/" && list.at(6) == "/" && list.at(7) == "/" && list.at(8) == "/")
     {
         QString presledek("--------------------------");
@@ -101,9 +101,9 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
         itm->setTextAlignment(3, Qt::AlignHCenter | Qt::AlignVCenter);
         itm->setBackground(3, QBrush(m_white));
 
-        itm->setText(4, presledek);
+        itm->setText(4, list.at(4));
         itm->setTextAlignment(4, Qt::AlignHCenter | Qt::AlignVCenter);
-        itm->setBackground(4, QBrush(m_white));
+        itm->setBackground(4, QBrush(m_darkGrey));
 
         itm->setText(5, presledek);
         itm->setTextAlignment(5, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -261,7 +261,9 @@ void ProizvodniProces::OpisProdukta(QStringList& partList)
 
     if(m_naziv_bool && partList.at(4).contains("*"))
     {
-        qDebug() << partList.at(4).contains("*");
+        QString tmp = partList.at(4);
+        tmp.remove("*");
+        partList.replace(4, tmp);
     }
 }
 
@@ -322,7 +324,7 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         item->setBackground(column, QBrush(m_green));
 
     if(item->background(0) == QBrush(m_green) && item->background(1) == QBrush(m_green) && item->background(2) == QBrush(m_green) && item->background(3) == QBrush(m_green) &&
-       item->background(5) == QBrush(m_green) && item->background(6) == QBrush(m_green) && item->background(7) == QBrush(m_green) && item->background(8) == QBrush(m_green))
+            item->background(5) == QBrush(m_green) && item->background(6) == QBrush(m_green) && item->background(7) == QBrush(m_green) && item->background(8) == QBrush(m_green))
         item->setBackground(4, QBrush(m_green));
     else if(item->text(4).contains("Vodnik") || item->text(4).contains("Kabel") || item->text(4).contains("Veriga") || item->text(4).contains("Snop") || item->text(4).contains("Drugo"))
         item->setBackground(4, QBrush(m_opis));
@@ -494,11 +496,17 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                                 AddRootToTreeWidget(partList, itm1, naziv, m_naziv_bool);
                                 m_naziv_bool = true;
                             }
+                            qDebug() << "error";
                             OpisProdukta(partList);
+                            qDebug() << partList;
                             AddRootToTreeWidget(partList, itm, naziv, m_naziv_bool);
+                            qDebug() << "error";
                             index++;
+                            qDebug() << "error";
                             tmp = m_searchList.at(index);
+                            qDebug() << "error";
                             partList = tmp.split(";", QString::SkipEmptyParts);
+                            qDebug() << "error";
                         }
                     }
                 }
