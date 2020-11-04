@@ -258,6 +258,11 @@ void ProizvodniProces::OpisProdukta(QStringList& partList)
             }
         }
     }
+
+    if(m_naziv_bool && partList.at(4).contains("*"))
+    {
+        qDebug() << partList.at(4).contains("*");
+    }
 }
 
 void ProizvodniProces::on_lineEdit_isciProdukt_textChanged(const QString &arg1)
