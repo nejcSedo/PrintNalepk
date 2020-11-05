@@ -11,7 +11,11 @@
 #include <QGraphicsPixmapItem>
 #include <QDirIterator>
 #include <QThread>
-#include <QMessageBox>
+#include <QPrinter>
+#include <QTextDocument>
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QNetworkAccessManager>
 
 #include <QDebug>
 
@@ -30,6 +34,8 @@ public:
     void AddRootToTreeWidget(const QStringList&, QTreeWidgetItem*, QString&, bool);
     void OpisProdukta(QStringList&);
     void ClearWidgets(QLayout*);
+    void TrenutniSeznam(QString&);
+    void ShraniBackgroundColor();
 
 private slots:
     void on_lineEdit_isciProdukt_textChanged(const QString &arg1);
@@ -37,8 +43,8 @@ private slots:
     void on_pushButton_pocisti_clicked();
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_pushButton_skrijSliko_clicked();
-
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
+    void on_pushButton_clicked();
 
 private:
     Ui::ProizvodniProces *ui;
@@ -52,6 +58,8 @@ private:
     QString m_picFolder;
     bool m_naziv_bool;
     int m_numOfImages;
+    QNetworkAccessManager manager;
+    QString target;
 };
 
 #endif // PROIZVODNIPROCES_H

@@ -5,7 +5,7 @@ ProizvodniProces::ProizvodniProces(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProizvodniProces), m_searchLine(""), m_searchList(), m_green(0,170,0),
     m_white(255,255,255), m_grey(220,220,220), m_opis(176,224,230), m_darkGrey(255,255,130),
-    m_picFolder("C:\\Users\\Admin\\Documents\\dev\\build-PrintNalepk-Desktop_Qt_5_14_2_MinGW_64_bit-Release\\images\\"),
+    m_picFolder("C:\\Users\\sedov\\Documents\\Qt projekti\\build-PrintNalepk-Desktop_Qt_5_15_1_MinGW_64_bit-Release\\images\\"),
     m_naziv_bool(false), m_numOfImages(0)
 {
     ui->setupUi(this);
@@ -41,6 +41,14 @@ ProizvodniProces::ProizvodniProces(QWidget *parent) :
 
 ProizvodniProces::~ProizvodniProces()
 {
+    QFile file("ShraniBarve.txt");
+
+    if(!file.open(QFile::WriteOnly | QFile::Truncate))
+        qDebug() << "Errorrrrrrr";
+    file.flush();
+    file.close();
+
+    ShraniBackgroundColor();
     delete ui;
 }
 
@@ -80,6 +88,11 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
         itm->setText(4, naziv);
         itm->setTextAlignment(4, Qt::AlignHCenter | Qt::AlignVCenter);
         itm->setBackground(4, QBrush(m_opis));
+        /*
+        itm->setText(5, "Tehnični načrt");
+        itm->setTextAlignment(5, Qt::AlignHCenter | Qt::AlignVCenter);
+        itm->setBackground(5, QBrush(m_white));
+        */
     }
     else if(list.at(0) == "/" && list.at(1) == "/" && list.at(2) == "/" && list.at(3) == "/" &&
             list.at(5) == "/" && list.at(6) == "/" && list.at(7) == "/" && list.at(8) == "/")
@@ -285,8 +298,54 @@ void ProizvodniProces::ClearWidgets(QLayout* layout)
     }
 }
 
+void ProizvodniProces::TrenutniSeznam(QString& naziv)
+{
+    QFile file("trenutniSeznam.txt");
+
+    if(!file.open(QFile::WriteOnly | QFile::Append))
+        qDebug() << "ERORRRRR";
+
+    QTextStream out(&file);
+    out.setCodec("UTF-8");
+
+    out << naziv << "\n";
+    file.flush();
+    file.close();
+}
+
+void ProizvodniProces::ShraniBackgroundColor()
+{
+    QFile file("ShraniBarve.txt");
+
+    if(!file.open(QFile::WriteOnly | QFile::Append))
+        qDebug() << "ERORRRRR";
+
+    QTextStream out(&file);
+    out.setCodec("UTF-8");
+    QString line("");
+    for(int row(0); row < ui->treeWidget->topLevelItemCount(); row++)
+    {
+        for(int column(0); column < 9; column++)
+        {
+            QColor color(ui->treeWidget->topLevelItem(row)->backgroundColor(column));
+            if(color.name() == "#000000")
+                color.setRgb(255,255,255);
+            line += (color.name() + ";");
+        }
+    }
+    out << line;
+    file.flush();
+    file.close();
+}
+
 void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
+    /*
+    if(item->text(5) == "Tehnični načrt")
+    {
+        QDesktopServices::openUrl(QUrl::from("someFilePath"));
+    }
+    */
     if(item->background(4) == QBrush(m_opis))
     {
         ClearWidgets(ui->verticalLayout_image);
@@ -316,18 +375,16 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
     if(item->background(4) == QBrush(m_darkGrey))
     {
         QPixmap image(m_picFolder + item->text(4) + ".jpg");
-        QMessageBox* msgBox = new QMessageBox();
-
-        QSize pixSize = msgBox->size();
-        pixSize.scale(size(), Qt::KeepAspectRatio);
-        msgBox->setFixedSize(pixSize);
-
-        msgBox->setText(item->text(4));
-        msgBox->setStandardButtons(QMessageBox::Ok);
-        msgBox->setIconPixmap(image);
-
-        msgBox->show();
-        msgBox->exec();
+        image = image.scaled(this->width(), this->height(), Qt::AspectRatioMode::KeepAspectRatio);
+        QLabel* label = new QLabel();
+        QHBoxLayout* layout = new QHBoxLayout(this);
+        label->setPixmap(image);
+        layout->addWidget(label);
+        QDialog* imageDialog = new QDialog(this);
+        imageDialog->setLayout(layout);
+        imageDialog->showMaximized();
+        imageDialog->show();
+        imageDialog->exec();
     }
 
     if(item->background(column) == QBrush(m_green))
@@ -337,16 +394,22 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         else if(column % 2 == 0)
             item->setBackground(column, QBrush(m_white));
     }
+
     else
         item->setBackground(column, QBrush(m_green));
 
     if(item->background(0) == QBrush(m_green) && item->background(1) == QBrush(m_green) && item->background(2) == QBrush(m_green) && item->background(3) == QBrush(m_green) &&
             item->background(5) == QBrush(m_green) && item->background(6) == QBrush(m_green) && item->background(7) == QBrush(m_green) && item->background(8) == QBrush(m_green))
         item->setBackground(4, QBrush(m_green));
+
     else if(item->text(4).contains("Vodnik") || item->text(4).contains("Kabel") || item->text(4).contains("Veriga") || item->text(4).contains("Snop") || item->text(4).contains("Drugo"))
         item->setBackground(4, QBrush(m_opis));
+
+    else if(item->text(3) == "--------------------------")
+        item->setBackground(4, QBrush(m_darkGrey));
     else
         item->setBackground(4, QBrush(m_white));
+
     if(item->text(0) == "" || item->text(1) == "" || item->text(2) == "" || item->text(3) == "" || item->text(5) == "" || item->text(6) == "" || item->text(7) == "" || item->text(8) == "")
     {
         item->setBackground(0, QBrush(m_white));
@@ -362,6 +425,20 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
 
 void ProizvodniProces::on_pushButton_pocisti_clicked()
 {
+    QFile file("trenutniSeznam.txt");
+
+    if(!file.open(QFile::WriteOnly | QFile::Truncate))
+        qDebug() << "Errorrrrrrr";
+    file.flush();
+    file.close();
+
+    QFile file1("ShraniBarve.txt");
+
+    if(!file1.open(QFile::WriteOnly | QFile::Truncate))
+        qDebug() << "Errorrrrrrr";
+    file1.flush();
+    file1.close();
+
     ClearWidgets(ui->verticalLayout_image);
     ui->lineEdit_isciProdukt->clear();
     ui->listWidget->clear();
@@ -395,6 +472,7 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                 {
                     if(m_searchList.at(1).toUpper() == naziv)
                     {
+                        TrenutniSeznam(m_searchLine);
                         QStringList partList = m_searchLine.split(";", QString::SkipEmptyParts);
                         naziv = "Vodnik\n" + naziv;
                         m_naziv_bool = false;
@@ -413,6 +491,7 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                 {
                     if(m_searchList.at(1).toUpper() == naziv)
                     {
+                        TrenutniSeznam(m_searchLine);
                         int index(0);
                         m_searchList = m_searchLine.split("&", QString::SkipEmptyParts);
                         QStringList partList;
@@ -441,6 +520,7 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                 {
                     if(m_searchList.at(1).toUpper() == naziv)
                     {
+                        TrenutniSeznam(m_searchLine);
                         int index(0);
                         m_searchList = m_searchLine.split("&", QString::SkipEmptyParts);
                         QStringList partList;
@@ -469,6 +549,7 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                 {
                     if(m_searchList.at(1).toUpper() == naziv)
                     {
+                        TrenutniSeznam(m_searchLine);
                         int index(0);
                         m_searchList = m_searchLine.split("&", QString::SkipEmptyParts);
                         QStringList partList;
@@ -497,6 +578,7 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                 {
                     if(m_searchList.at(1).toUpper() == naziv)
                     {
+                        TrenutniSeznam(m_searchLine);
                         int index(0);
                         m_searchList = m_searchLine.split("&", QString::SkipEmptyParts);
                         QStringList partList;
@@ -513,17 +595,11 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                                 AddRootToTreeWidget(partList, itm1, naziv, m_naziv_bool);
                                 m_naziv_bool = true;
                             }
-                            qDebug() << "error";
                             OpisProdukta(partList);
-                            qDebug() << partList;
                             AddRootToTreeWidget(partList, itm, naziv, m_naziv_bool);
-                            qDebug() << "error";
                             index++;
-                            qDebug() << "error";
                             tmp = m_searchList.at(index);
-                            qDebug() << "error";
                             partList = tmp.split(";", QString::SkipEmptyParts);
-                            qDebug() << "error";
                         }
                     }
                 }
@@ -541,4 +617,159 @@ void ProizvodniProces::on_pushButton_skrijSliko_clicked()
 void ProizvodniProces::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
     ui->label_opis->setText(item->text(column));
+}
+
+void ProizvodniProces::on_pushButton_clicked()
+{
+    QFile file("trenutniSeznam.txt");
+
+    if(!file.open(QFile::Text | QFile::ReadOnly))
+        qDebug() << "Errorrrrrrr";
+
+    QTextStream out(&file);
+    out.setCodec("UTF-8");
+    QString naziv("");
+    while(!out.atEnd())
+    {
+        m_searchLine = out.readLine();
+        m_searchList = m_searchLine.split(';', QString::SkipEmptyParts);
+        if(m_searchList.at(0) == "V")
+        {
+            QStringList partList = m_searchLine.split(";", QString::SkipEmptyParts);
+            naziv = "Vodnik\n" + partList.at(1);
+            m_naziv_bool = false;
+            QTreeWidgetItem* itm = new QTreeWidgetItem();
+            if(partList.length() > 9)
+            {
+                QTreeWidgetItem* itm1 = new QTreeWidgetItem();
+                AddRootToTreeWidget(partList, itm1, naziv, m_naziv_bool);
+                m_naziv_bool = true;
+            }
+            OpisProdukta(partList);
+            AddRootToTreeWidget(partList, itm, naziv, m_naziv_bool);
+        }
+        else if(m_searchList.at(0) == "K")
+        {
+            int index(0);
+            m_searchList = m_searchLine.split("&", QString::SkipEmptyParts);
+            QStringList partList;
+            QString tmp = m_searchList.at(index);
+            partList = tmp.split(";", QString::SkipEmptyParts);
+            naziv = "Kabel\n" + partList.at(1);
+            m_naziv_bool = false;
+            while(tmp != "***")
+            {
+                QTreeWidgetItem* itm = new QTreeWidgetItem();
+                if(partList.length() > 9)
+                {
+                    QTreeWidgetItem* itm1 = new QTreeWidgetItem();
+                    AddRootToTreeWidget(partList, itm1, naziv, m_naziv_bool);
+                    m_naziv_bool = true;
+                }
+                OpisProdukta(partList);
+                AddRootToTreeWidget(partList, itm, naziv, m_naziv_bool);
+                index++;
+                tmp = m_searchList.at(index);
+                partList = tmp.split(";", QString::SkipEmptyParts);
+            }
+        }
+        else if(m_searchList.at(0) == "VR")
+        {
+            int index(0);
+            m_searchList = m_searchLine.split("&", QString::SkipEmptyParts);
+            QStringList partList;
+            QString tmp = m_searchList.at(index);
+            partList = tmp.split(";", QString::SkipEmptyParts);
+            naziv = "Veriga\n" + partList.at(1);
+            m_naziv_bool = false;
+            while(tmp != "***")
+            {
+                QTreeWidgetItem* itm = new QTreeWidgetItem();
+                if(partList.length() > 9)
+                {
+                    QTreeWidgetItem* itm1 = new QTreeWidgetItem();
+                    AddRootToTreeWidget(partList, itm1, naziv, m_naziv_bool);
+                    m_naziv_bool = true;
+                }
+                OpisProdukta(partList);
+                AddRootToTreeWidget(partList, itm, naziv, m_naziv_bool);
+                index++;
+                tmp = m_searchList.at(index);
+                partList = tmp.split(";", QString::SkipEmptyParts);
+            }
+        }
+        else if(m_searchList.at(0) == "S")
+        {
+            int index(0);
+            m_searchList = m_searchLine.split("&", QString::SkipEmptyParts);
+            QStringList partList;
+            QString tmp = m_searchList.at(index);
+            partList = tmp.split(";", QString::SkipEmptyParts);
+            naziv = "Snop\n" + partList.at(1);
+            m_naziv_bool = false;
+            while(tmp != "***")
+            {
+                QTreeWidgetItem* itm = new QTreeWidgetItem();
+                if(partList.length() > 9)
+                {
+                    QTreeWidgetItem* itm1 = new QTreeWidgetItem();
+                    AddRootToTreeWidget(partList, itm1, naziv, m_naziv_bool);
+                    m_naziv_bool = true;
+                }
+                OpisProdukta(partList);
+                AddRootToTreeWidget(partList, itm, naziv, m_naziv_bool);
+                index++;
+                tmp = m_searchList.at(index);
+                partList = tmp.split(";", QString::SkipEmptyParts);
+            }
+        }
+        else if(m_searchList.at(0) == "N")
+        {
+            int index(0);
+            m_searchList = m_searchLine.split("&", QString::SkipEmptyParts);
+            QStringList partList;
+            QString tmp = m_searchList.at(index);
+            partList = tmp.split(";", QString::SkipEmptyParts);
+            naziv = "Drugo\n" + partList.at(1);
+            m_naziv_bool = false;
+            while(tmp != "***")
+            {
+                QTreeWidgetItem* itm = new QTreeWidgetItem();
+                if(partList.length() > 9)
+                {
+                    QTreeWidgetItem* itm1 = new QTreeWidgetItem();
+                    AddRootToTreeWidget(partList, itm1, naziv, m_naziv_bool);
+                    m_naziv_bool = true;
+                }
+                OpisProdukta(partList);
+                AddRootToTreeWidget(partList, itm, naziv, m_naziv_bool);
+                index++;
+                tmp = m_searchList.at(index);
+                partList = tmp.split(";", QString::SkipEmptyParts);
+            }
+        }
+    }
+    file.close();
+
+
+    QFile fileColor("ShraniBarve.txt");
+
+    if(!fileColor.open(QFile::Text | QFile::ReadOnly))
+        qDebug() << "ERORRRRR";
+
+    QTextStream inColor(&fileColor);
+    inColor.setCodec("UTF-8");
+    QString colorLine = inColor.readLine();
+    fileColor.close();
+    QStringList colorList = colorLine.split(";", Qt::SkipEmptyParts);
+    int index(0);
+    for(int row(0); row < ui->treeWidget->topLevelItemCount(); row++)
+    {
+        for(int column(0); column < 9; column++)
+        {
+            QColor color(colorList.at(index));
+            index++;
+            ui->treeWidget->topLevelItem(row)->setBackground(column, color);
+        }
+    }
 }
