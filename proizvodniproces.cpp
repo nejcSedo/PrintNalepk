@@ -313,6 +313,23 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         ui->verticalLayout_image->addStretch(1);
     }
 
+    if(item->background(4) == QBrush(m_darkGrey))
+    {
+        QPixmap image(m_picFolder + item->text(4) + ".jpg");
+        QMessageBox* msgBox = new QMessageBox();
+
+        QSize pixSize = msgBox->size();
+        pixSize.scale(size(), Qt::KeepAspectRatio);
+        msgBox->setFixedSize(pixSize);
+
+        msgBox->setText(item->text(4));
+        msgBox->setStandardButtons(QMessageBox::Ok);
+        msgBox->setIconPixmap(image);
+
+        msgBox->show();
+        msgBox->exec();
+    }
+
     if(item->background(column) == QBrush(m_green))
     {
         if(column % 2 == 1)

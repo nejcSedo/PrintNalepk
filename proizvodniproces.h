@@ -11,6 +11,7 @@
 #include <QGraphicsPixmapItem>
 #include <QDirIterator>
 #include <QThread>
+#include <QMessageBox>
 
 #include <QDebug>
 
