@@ -88,12 +88,8 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
         itm->setText(4, naziv);
         itm->setTextAlignment(4, Qt::AlignHCenter | Qt::AlignVCenter);
         itm->setBackground(4, QBrush(m_opis));
-        /*
-        itm->setText(5, "Tehnični načrt");
-        itm->setTextAlignment(5, Qt::AlignHCenter | Qt::AlignVCenter);
-        itm->setBackground(5, QBrush(m_white));
-        */
     }
+
     else if(list.at(0) == "/" && list.at(1) == "/" && list.at(2) == "/" && list.at(3) == "/" &&
             list.at(5) == "/" && list.at(6) == "/" && list.at(7) == "/" && list.at(8) == "/")
     {
@@ -134,7 +130,8 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
         itm->setTextAlignment(8, Qt::AlignHCenter | Qt::AlignVCenter);
         itm->setBackground(8, QBrush(m_white));
     }
-    else
+
+    else if(list.at(0) != "-*-")
     {
         itm->setText(0, list.at(0));
         itm->setTextAlignment(0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -188,6 +185,19 @@ void ProizvodniProces::AddRootToTreeWidget(const QStringList& list, QTreeWidgetI
         itm->setTextAlignment(8, Qt::AlignHCenter | Qt::AlignVCenter);
         if(list.at(8) == "/" || list.at(8) == "")
             itm->setBackground(8, QBrush(m_green));
+    }
+
+    else
+    {
+        itm->setBackground(0, QBrush(QColor(100,100,100)));
+        itm->setBackground(1, QBrush(QColor(100,100,100)));
+        itm->setBackground(2, QBrush(QColor(100,100,100)));
+        itm->setBackground(3, QBrush(QColor(100,100,100)));
+        itm->setBackground(4, QBrush(QColor(100,100,100)));
+        itm->setBackground(5, QBrush(QColor(100,100,100)));
+        itm->setBackground(6, QBrush(QColor(100,100,100)));
+        itm->setBackground(7, QBrush(QColor(100,100,100)));
+        itm->setBackground(8, QBrush(QColor(100,100,100)));
     }
 
     ui->treeWidget->addTopLevelItem(itm);
@@ -340,12 +350,6 @@ void ProizvodniProces::ShraniBackgroundColor()
 
 void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
-    /*
-    if(item->text(5) == "Tehnični načrt")
-    {
-        QDesktopServices::openUrl(QUrl::from("someFilePath"));
-    }
-    */
     if(item->background(4) == QBrush(m_opis))
     {
         ClearWidgets(ui->verticalLayout_image);
@@ -381,6 +385,7 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         label->setPixmap(image);
         layout->addWidget(label);
         QDialog* imageDialog = new QDialog(this);
+        imageDialog->setWindowTitle(item->text(4));
         imageDialog->setLayout(layout);
         imageDialog->showMaximized();
         imageDialog->show();
@@ -406,11 +411,35 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         item->setBackground(4, QBrush(m_opis));
 
     else if(item->text(3) == "--------------------------")
+    {
+        item->setBackground(0, QBrush(m_white));
+        item->setBackground(1, QBrush(m_white));
+        item->setBackground(2, QBrush(m_white));
+        item->setBackground(3, QBrush(m_white));
         item->setBackground(4, QBrush(m_darkGrey));
+        item->setBackground(5, QBrush(m_white));
+        item->setBackground(6, QBrush(m_white));
+        item->setBackground(7, QBrush(m_white));
+        item->setBackground(8, QBrush(m_white));
+    }
+
     else
         item->setBackground(4, QBrush(m_white));
 
-    if(item->text(0) == "" || item->text(1) == "" || item->text(2) == "" || item->text(3) == "" || item->text(5) == "" || item->text(6) == "" || item->text(7) == "" || item->text(8) == "")
+    if(item->background(0) == QBrush(QColor(100,100,100)))
+    {
+        item->setBackground(0, QBrush(QColor(100,100,100)));
+        item->setBackground(1, QBrush(QColor(100,100,100)));
+        item->setBackground(2, QBrush(QColor(100,100,100)));
+        item->setBackground(3, QBrush(QColor(100,100,100)));
+        item->setBackground(4, QBrush(QColor(100,100,100)));
+        item->setBackground(5, QBrush(QColor(100,100,100)));
+        item->setBackground(6, QBrush(QColor(100,100,100)));
+        item->setBackground(7, QBrush(QColor(100,100,100)));
+        item->setBackground(8, QBrush(QColor(100,100,100)));
+    }
+
+    else if(item->text(0) == "" || item->text(1) == "" || item->text(2) == "" || item->text(3) == "" || item->text(5) == "" || item->text(6) == "" || item->text(7) == "" || item->text(8) == "")
     {
         item->setBackground(0, QBrush(m_white));
         item->setBackground(1, QBrush(m_white));
@@ -485,6 +514,10 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                         }
                         OpisProdukta(partList);
                         AddRootToTreeWidget(partList, itm, naziv, m_naziv_bool);
+                        QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+                        partList.clear();
+                        partList.append("-*-");
+                        AddRootToTreeWidget(partList, itm2, naziv, m_naziv_bool);
                     }
                 }
                 else if(m_searchList.at(0) == "K")
@@ -514,6 +547,10 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                             tmp = m_searchList.at(index);
                             partList = tmp.split(";", QString::SkipEmptyParts);
                         }
+                        QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+                        partList.clear();
+                        partList.append("-*-");
+                        AddRootToTreeWidget(partList, itm2, naziv, m_naziv_bool);
                     }
                 }
                 else if(m_searchList.at(0) == "VR")
@@ -543,6 +580,10 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                             tmp = m_searchList.at(index);
                             partList = tmp.split(";", QString::SkipEmptyParts);
                         }
+                        QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+                        partList.clear();
+                        partList.append("-*-");
+                        AddRootToTreeWidget(partList, itm2, naziv, m_naziv_bool);
                     }
                 }
                 else if(m_searchList.at(0) == "S")
@@ -572,6 +613,10 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                             tmp = m_searchList.at(index);
                             partList = tmp.split(";", QString::SkipEmptyParts);
                         }
+                        QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+                        partList.clear();
+                        partList.append("-*-");
+                        AddRootToTreeWidget(partList, itm2, naziv, m_naziv_bool);
                     }
                 }
                 else if(m_searchList.at(0) == "N")
@@ -601,6 +646,10 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                             tmp = m_searchList.at(index);
                             partList = tmp.split(";", QString::SkipEmptyParts);
                         }
+                        QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+                        partList.clear();
+                        partList.append("-*-");
+                        AddRootToTreeWidget(partList, itm2, naziv, m_naziv_bool);
                     }
                 }
             }

@@ -11,11 +11,6 @@
 #include <QGraphicsPixmapItem>
 #include <QDirIterator>
 #include <QThread>
-#include <QPrinter>
-#include <QTextDocument>
-#include <QDesktopServices>
-#include <QFileDialog>
-#include <QNetworkAccessManager>
 
 #include <QDebug>
 
@@ -58,8 +53,6 @@ private:
     QString m_picFolder;
     bool m_naziv_bool;
     int m_numOfImages;
-    QNetworkAccessManager manager;
-    QString target;
 };
 
 #endif // PROIZVODNIPROCES_H
