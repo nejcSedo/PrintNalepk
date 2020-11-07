@@ -54,16 +54,16 @@ void DodajProdukt::on_pushButton_clicked()
     if(ui->comboBox_vrstaProdukta->currentIndex() == 0)
     {
         m_steviloZil = 1;
-        naziv = "V;";
+        naziv = "V" + ui->lineEdit_url->text() + ";";
     }
     else if(ui->comboBox_vrstaProdukta->currentIndex() == 1)
-        naziv = "K;";
+        naziv = "K" + ui->lineEdit_url->text() + ";";
     else if(ui->comboBox_vrstaProdukta->currentIndex() == 2)
-        naziv = "VR;";
+        naziv = "VR" + ui->lineEdit_url->text() + ";";
     else if(ui->comboBox_vrstaProdukta->currentIndex() == 3)
-        naziv = "S;";
+        naziv = "S" + ui->lineEdit_url->text() + ";";
     else
-        naziv = "N;";
+        naziv = "N" + ui->lineEdit_url->text() + ";";
     naziv += ui->lineEdit->text().toUpper();
     while(naziv.at(naziv.length() - 1) == ' ')
         naziv.remove(-1, 1);

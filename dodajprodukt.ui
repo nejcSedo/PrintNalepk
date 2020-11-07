@@ -14,7 +14,46 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::WinPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <property name="text">
+        <string>Naziv:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_5">
@@ -79,102 +118,7 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::WinPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <property name="text">
-        <string>Naziv:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit"/>
-     </item>
-    </layout>
-   </item>
-   <item row="6" column="0">
-    <widget class="QPushButton" name="pushButton">
-     <property name="text">
-      <string>Dodaj</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QTableWidget" name="tableWidget">
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nov stolpec</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item row="3" column="0">
+   <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QLabel" name="label_6">
@@ -210,6 +154,33 @@
      </item>
      <item>
       <widget class="QComboBox" name="comboBox_stevilozil"/>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>URL:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_url"/>
      </item>
     </layout>
    </item>
@@ -270,6 +241,62 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="5" column="0">
+    <widget class="QTableWidget" name="tableWidget">
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nov stolpec</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Dodaj</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

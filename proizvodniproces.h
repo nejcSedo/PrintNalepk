@@ -11,8 +11,13 @@
 #include <QGraphicsPixmapItem>
 #include <QDirIterator>
 #include <QThread>
-
 #include <QDebug>
+
+#include <QDesktopServices>
+#include <QUrl>
+#include <QFileDialog>
+#include <QList>
+#include <QTcpSocket>
 
 namespace Ui {
 class ProizvodniProces;
@@ -26,7 +31,7 @@ public:
     explicit ProizvodniProces(QWidget *parent = nullptr);
     ~ProizvodniProces();
     void Search(const QString&);
-    void AddRootToTreeWidget(const QStringList&, QTreeWidgetItem*, QString&, bool);
+    void AddRootToTreeWidget(const QStringList&, QTreeWidgetItem*, QString&, QString&, bool);
     void OpisProdukta(QStringList&);
     void ClearWidgets(QLayout*);
     void TrenutniSeznam(QString&);
