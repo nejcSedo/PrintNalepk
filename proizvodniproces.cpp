@@ -394,22 +394,22 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         productName.remove("Veriga\n");
         productName.remove("Snop\n");
         productName.remove("Drugo\n");
-        QDirIterator it(m_picFolder + productName + "\\", QStringList() << imageName + "*", QDir::Files, QDirIterator::Subdirectories);
+        QDirIterator it(m_picFolder + productName + "\\", QStringList() << imageName + "*", QDir::Files);
         while(it.hasNext())
         {
             m_numOfImages++;
             it.next();
         }
 
+        QPixmap image;
         for(int i(1); i <= m_numOfImages; i++)
         {
-            QPixmap image(m_picFolder + productName + "\\" + imageName + "_" + QString::number(i) + ".jpg");
+            image = m_picFolder + productName + "\\" + imageName + "_" + QString::number(i) + ".jpg";
             QLabel* label = new QLabel();
             label->setPixmap(image.scaled(width(), height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
             ui->verticalLayout_image->addWidget(label);
         }
-        ui->verticalLayout_image->addStretch(1);
-    }        
+    }
 
     if(item->background(4) == QBrush(m_darkGrey))
     {
@@ -421,10 +421,10 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         QPixmap image(m_picFolder + productName + "\\" + imageName + ".jpg");
         image = image.scaled(this->width(), this->height(), Qt::AspectRatioMode::KeepAspectRatio);
         QLabel* label = new QLabel();
-        QHBoxLayout* layout = new QHBoxLayout(this);
+        QHBoxLayout* layout = new QHBoxLayout();
         label->setPixmap(image);
         layout->addWidget(label);
-        QDialog* imageDialog = new QDialog(this);
+        QDialog* imageDialog = new QDialog();
         imageDialog->setWindowTitle(item->text(4));
         imageDialog->setLayout(layout);
         imageDialog->showMaximized();
@@ -731,6 +731,12 @@ void ProizvodniProces::on_treeWidget_itemClicked(QTreeWidgetItem *item, int colu
 
 void ProizvodniProces::on_pushButton_clicked()
 {
+    ClearWidgets(ui->verticalLayout_image);
+    ui->lineEdit_isciProdukt->clear();
+    ui->listWidget->clear();
+    ui->treeWidget->clear();
+    ui->label_opis->clear();
+
     QFile file("trenutniSeznam.txt");
 
     if(!file.open(QFile::Text | QFile::ReadOnly))
@@ -912,4 +918,6 @@ void ProizvodniProces::on_pushButton_clicked()
             ui->treeWidget->topLevelItem(row)->setBackground(column, color);
         }
     }
+
+    ui->pushButton->setDisabled(true);
 }
