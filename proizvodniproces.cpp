@@ -384,13 +384,17 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
     if(item->background(4) == QBrush(m_opis))
     {
         ClearWidgets(ui->verticalLayout_image);
-        QString imageName(item->text(4));
-        imageName.remove("Vodnik\n");
-        imageName.remove("Kabel\n");
-        imageName.remove("Veriga\n");
-        imageName.remove("Snop\n");
-        imageName.remove("Drugo\n");
-        QDirIterator it(m_picFolder, QStringList() << imageName + "*", QDir::Files, QDirIterator::Subdirectories);
+
+        QString productText(item->text(4));
+        QStringList productList = productText.split(" -- ", Qt::SkipEmptyParts);
+        QString imageName(productList.at(1));
+        QString productName(productList.at(0));
+        productName.remove("Vodnik\n");
+        productName.remove("Kabel\n");
+        productName.remove("Veriga\n");
+        productName.remove("Snop\n");
+        productName.remove("Drugo\n");
+        QDirIterator it(m_picFolder + productName + "\\", QStringList() << imageName + "*", QDir::Files, QDirIterator::Subdirectories);
         while(it.hasNext())
         {
             m_numOfImages++;
@@ -399,17 +403,22 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
 
         for(int i(1); i <= m_numOfImages; i++)
         {
-            QPixmap image(m_picFolder + imageName + "_" + QString::number(i) + ".jpg");
+            QPixmap image(m_picFolder + productName + "\\" + imageName + "_" + QString::number(i) + ".jpg");
             QLabel* label = new QLabel();
             label->setPixmap(image.scaled(width(), height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
             ui->verticalLayout_image->addWidget(label);
         }
         ui->verticalLayout_image->addStretch(1);
-    }
+    }        
 
     if(item->background(4) == QBrush(m_darkGrey))
     {
-        QPixmap image(m_picFolder + item->text(4) + ".jpg");
+        QString productText(item->text(4));
+        QStringList productList = productText.split(" -- ", Qt::SkipEmptyParts);
+        QString imageName(productList.at(1));
+        QString productName(productList.at(0));
+
+        QPixmap image(m_picFolder + productName + "\\" + imageName + ".jpg");
         image = image.scaled(this->width(), this->height(), Qt::AspectRatioMode::KeepAspectRatio);
         QLabel* label = new QLabel();
         QHBoxLayout* layout = new QHBoxLayout(this);
@@ -421,6 +430,14 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         imageDialog->showMaximized();
         imageDialog->show();
         imageDialog->exec();
+    }
+
+    if(item->background(column) == QBrush(m_green))
+    {
+        if(column % 2 == 1)
+            item->setBackground(column, QBrush(m_grey));
+        else if(column % 2 == 0)
+            item->setBackground(column, QBrush(m_white));
     }
 
     if(item->background(column) == QBrush(m_green))
@@ -481,6 +498,9 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
         item->setBackground(7, QBrush(m_white));
         item->setBackground(8, QBrush(m_white));
     }
+
+    if(item->text(5) == "Tehnični načrt")
+        item->setBackground(5, QBrush(QColor(51,153,255)));
 }
 
 void ProizvodniProces::on_pushButton_pocisti_clicked()
@@ -739,6 +759,10 @@ void ProizvodniProces::on_pushButton_clicked()
             }
             OpisProdukta(partList);
             AddRootToTreeWidget(partList, itm, naziv, http, m_naziv_bool);
+            QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+            partList.clear();
+            partList.append("-*-");
+            AddRootToTreeWidget(partList, itm2, naziv, http, m_naziv_bool);
         }
         else if(m_searchList.at(0).at(0) == "K")
         {
@@ -766,6 +790,10 @@ void ProizvodniProces::on_pushButton_clicked()
                 tmp = m_searchList.at(index);
                 partList = tmp.split(";", QString::SkipEmptyParts);
             }
+            QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+            partList.clear();
+            partList.append("-*-");
+            AddRootToTreeWidget(partList, itm2, naziv, http, m_naziv_bool);
         }
         else if(m_searchList.at(0).at(1) == "R")
         {
@@ -793,6 +821,10 @@ void ProizvodniProces::on_pushButton_clicked()
                 tmp = m_searchList.at(index);
                 partList = tmp.split(";", QString::SkipEmptyParts);
             }
+            QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+            partList.clear();
+            partList.append("-*-");
+            AddRootToTreeWidget(partList, itm2, naziv, http, m_naziv_bool);
         }
         else if(m_searchList.at(0).at(0) == "S")
         {
@@ -820,6 +852,10 @@ void ProizvodniProces::on_pushButton_clicked()
                 tmp = m_searchList.at(index);
                 partList = tmp.split(";", QString::SkipEmptyParts);
             }
+            QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+            partList.clear();
+            partList.append("-*-");
+            AddRootToTreeWidget(partList, itm2, naziv, http, m_naziv_bool);
         }
         else if(m_searchList.at(0).at(0) == "N")
         {
@@ -847,6 +883,10 @@ void ProizvodniProces::on_pushButton_clicked()
                 tmp = m_searchList.at(index);
                 partList = tmp.split(";", QString::SkipEmptyParts);
             }
+            QTreeWidgetItem* itm2 = new QTreeWidgetItem();
+            partList.clear();
+            partList.append("-*-");
+            AddRootToTreeWidget(partList, itm2, naziv, http, m_naziv_bool);
         }
     }
     file.close();
