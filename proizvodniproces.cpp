@@ -37,6 +37,16 @@ ProizvodniProces::ProizvodniProces(QWidget *parent) :
     ui->label_B->setFixedWidth(ui->treeWidget->columnWidth(4) + ui->treeWidget->columnWidth(5) + ui->treeWidget->columnWidth(6) + ui->treeWidget->columnWidth(7) + ui->treeWidget->columnWidth(8));
     QFont font("Arial", 20, QFont::Bold);
     ui->lineEdit_isciProdukt->setFocus();
+
+    QFile file("trenutniSeznam.txt");
+
+    if(!file.open(QFile::Text | QFile::ReadOnly))
+        qDebug() << "Errorrrrrrr";
+
+    if(file.size() == 0)
+        ui->pushButton->setEnabled(false);
+
+    file.close();
 }
 
 ProizvodniProces::~ProizvodniProces()
@@ -415,7 +425,7 @@ void ProizvodniProces::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, in
     {
         QString productText(item->text(4));
         QStringList productList = productText.split(" -- ", Qt::SkipEmptyParts);
-        QString imageName(productList.at(1));
+        QString imageName(productList.at(0) + " -- " + productList.at(1));
         QString productName(productList.at(0));
 
         QPixmap image(m_picFolder + productName + "\\" + imageName + ".jpg");
@@ -741,6 +751,12 @@ void ProizvodniProces::on_pushButton_clicked()
 
     if(!file.open(QFile::Text | QFile::ReadOnly))
         qDebug() << "Errorrrrrrr";
+
+    if(file.size() == 0)
+    {
+        file.close();
+        return;
+    }
 
     QTextStream out(&file);
     out.setCodec("UTF-8");

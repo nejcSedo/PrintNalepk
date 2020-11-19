@@ -9,4 +9,10 @@
         <file>error.ico</file>
         <file>delete.ico</file>
     </qresource>
+    <qresource prefix="/">
+        <file>barve.txt</file>
+        <file>nalepke.txt</file>
+        <file>orodja.txt</file>
+        <file>proizvodniproces.txt</file>
+    </qresource>
 </RCC>

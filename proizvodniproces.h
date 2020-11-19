@@ -10,13 +10,9 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QDirIterator>
-#include <QThread>
 #include <QDebug>
-
 #include <QDesktopServices>
 #include <QUrl>
-#include <QFileDialog>
-#include <QList>
 #include <QTcpSocket>
 
 namespace Ui {
