@@ -496,3 +496,69 @@ void MainWindow::on_actionDodaj_produkt_triggered()
     proces->exec();
     delete proces;
 }
+
+void MainWindow::on_actionPosodobi_seznam_triggered()
+{
+    // Iz serverja potegne najnovejse datoteke
+    QNetworkAccessManager man;
+    QNetworkRequest reqProcesi(QUrl("http://elra.chickenkiller.com/Proces/proizvodniproces.txt"));
+    QString ua("HttpRequestDemo/0.1 (Win64) Qt/5.7");
+    reqProcesi.setHeader(QNetworkRequest::UserAgentHeader, QVariant(ua));
+    QNetworkReply* replyProcesi = man.get(reqProcesi);
+    QObject::connect(replyProcesi, &QNetworkReply::finished, [&]() {
+        QByteArray read = replyProcesi->readAll();
+
+        QFile file("proizvodniproces.txt");
+        if(!file.open(QFile::WriteOnly | QFile::Truncate))
+            qDebug() << "Errorrrrrrr";
+
+        QTextStream out(&file);
+        out.setCodec("UTF-8");
+        out << read << "\n";
+        file.flush();
+        file.close();
+
+        replyProcesi->close();
+        replyProcesi->deleteLater();
+    });
+
+    QNetworkRequest reqBarve(QUrl("http://elra.chickenkiller.com/Proces/barve.txt"));
+    reqBarve.setHeader(QNetworkRequest::UserAgentHeader, QVariant(ua));
+    QNetworkReply* replyBarve = man.get(reqBarve);
+    QObject::connect(replyBarve, &QNetworkReply::finished, [&]() {
+        QByteArray read = replyBarve->readAll();
+
+        QFile file("barve.txt");
+        if(!file.open(QFile::WriteOnly | QFile::Truncate))
+            qDebug() << "Errorrrrrrr";
+
+        QTextStream out(&file);
+        out.setCodec("UTF-8");
+        out << read << "\n";
+        file.flush();
+        file.close();
+
+        replyBarve->close();
+        replyBarve->deleteLater();
+    });
+
+    QNetworkRequest reqOrodja(QUrl("http://elra.chickenkiller.com/Proces/orodja.txt"));
+    reqOrodja.setHeader(QNetworkRequest::UserAgentHeader, QVariant(ua));
+    QNetworkReply* replyOrodja = man.get(reqOrodja);
+    QObject::connect(replyOrodja, &QNetworkReply::finished, [&]() {
+        QByteArray read = replyOrodja->readAll();
+
+        QFile file("orodja.txt");
+        if(!file.open(QFile::WriteOnly | QFile::Truncate))
+            qDebug() << "Errorrrrrrr";
+
+        QTextStream out(&file);
+        out.setCodec("UTF-8");
+        out << read << "\n";
+        file.flush();
+        file.close();
+
+        replyOrodja->close();
+        replyOrodja->deleteLater();
+    });
+}

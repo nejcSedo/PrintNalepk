@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include "novanalepka.h"
 #include "methods.h"
 #include "proizvodniproces.h"
@@ -51,6 +54,8 @@ private slots:
     void on_actionProizvodni_proces_triggered();
 
     void on_actionDodaj_produkt_triggered();
+
+    void on_actionPosodobi_seznam_triggered();
 
 private:
     Ui::MainWindow *ui;

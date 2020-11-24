@@ -330,6 +330,8 @@
     </property>
     <addaction name="actionProizvodni_proces"/>
     <addaction name="actionDodaj_produkt"/>
+    <addaction name="separator"/>
+    <addaction name="actionPosodobi_seznam"/>
    </widget>
    <addaction name="menuMeni"/>
    <addaction name="menuProizvodni_proces"/>
@@ -417,6 +419,11 @@
   <action name="actionDodaj_produkt">
    <property name="text">
     <string>Dodaj produkt...</string>
+   </property>
+  </action>
+  <action name="actionPosodobi_seznam">
+   <property name="text">
+    <string>Posodobi seznam...</string>
    </property>
   </action>
  </widget>
