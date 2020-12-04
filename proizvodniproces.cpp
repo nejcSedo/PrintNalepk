@@ -5,7 +5,7 @@ ProizvodniProces::ProizvodniProces(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProizvodniProces), m_searchLine(""), m_searchList(), m_green(0,170,0),
     m_white(255,255,255), m_grey(220,220,220), m_opis(176,224,230), m_darkGrey(255,255,130),
-    m_picFolder("C:\\Users\\sedov\\Documents\\Qt projekti\\build-PrintNalepk-Desktop_Qt_5_15_1_MinGW_64_bit-Release\\images\\"),
+    m_picFolder("C:\\Users\\Admin\\Documents\\dev\\build-PrintNalepk-Desktop_Qt_5_14_2_MinGW_64_bit-Release\\images\\"),
     m_naziv_bool(false), m_numOfImages(0)
 {
     ui->setupUi(this);
@@ -263,6 +263,7 @@ void ProizvodniProces::OpisProdukta(QStringList& partList)
         searchList = removeToolHeader.split(':', QString::SkipEmptyParts);
         searchList.replace(1, tmp);
 
+        qDebug() << "ERROR";
         while(!out.atEnd())
         {
             QString searchLine = out.readLine();
@@ -618,7 +619,7 @@ void ProizvodniProces::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
                         AddRootToTreeWidget(partList, itm2, naziv, http, m_naziv_bool);
                     }
                 }
-                else if(m_searchList.at(0).at(1) == "R")
+                else if(m_searchList.at(0).at(0) == "R")
                 {
                     if(m_searchList.at(1).toUpper() == naziv)
                     {

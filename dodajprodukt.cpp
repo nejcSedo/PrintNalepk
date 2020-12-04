@@ -59,7 +59,7 @@ void DodajProdukt::on_pushButton_clicked()
     else if(ui->comboBox_vrstaProdukta->currentIndex() == 1)
         naziv = "K" + ui->lineEdit_url->text() + ";";
     else if(ui->comboBox_vrstaProdukta->currentIndex() == 2)
-        naziv = "VR" + ui->lineEdit_url->text() + ";";
+        naziv = "R" + ui->lineEdit_url->text() + ";";
     else if(ui->comboBox_vrstaProdukta->currentIndex() == 3)
         naziv = "S" + ui->lineEdit_url->text() + ";";
     else
